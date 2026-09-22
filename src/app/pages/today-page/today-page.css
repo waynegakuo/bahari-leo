@@ -1,0 +1,157 @@
+:host {
+  display: block;
+}
+
+.today {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.hero {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.verdict {
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 1.15rem 1.1rem 1.2rem;
+}
+
+.place {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.verdict h1 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.7rem, 5vw, 2.35rem);
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+
+.today[data-mood='kind'] .verdict h1 { color: var(--ok); }
+.today[data-mood='rough'] .verdict h1 { color: var(--coral); }
+
+.swahili {
+  margin: 0.35rem 0 0;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.blurb,
+.senses,
+.status {
+  margin: 0.65rem 0 0;
+  line-height: 1.5;
+}
+
+.senses,
+.status {
+  color: var(--ink-soft);
+}
+
+.bad {
+  color: var(--coral);
+}
+
+.acts {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.acts li {
+  font-size: 0.78rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ok) 16%, #fff);
+  color: var(--ok);
+}
+
+.acts--no {
+  background: var(--paper-2);
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  align-items: center;
+}
+
+.go {
+  border: 0;
+  background: var(--sea);
+  color: #f4efe6;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.wildlife {
+  padding: 1rem 1.05rem;
+  background: color-mix(in srgb, var(--foam) 70%, #fff);
+  border: 1px solid var(--line);
+}
+
+.wildlife h2,
+.also h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.wildlife p {
+  margin: 0.4rem 0 0.75rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.also-grid {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+.mini {
+  text-align: left;
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 0.75rem 0.85rem;
+  cursor: pointer;
+  font: inherit;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.mini span {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.mini[data-mood='kind'] strong { color: var(--ok); }
+.mini[data-mood='rough'] strong { color: var(--coral); }
+
+.more {
+  margin: 0.4rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.more a {
+  color: var(--sea);
+}
+
+@media (min-width: 640px) {
+  .also-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

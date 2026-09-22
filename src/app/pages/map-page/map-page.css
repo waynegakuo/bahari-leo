@@ -1,0 +1,256 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.stage {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+.chrome {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 800;
+}
+
+.legend-card,
+.layers-btn,
+.card,
+.hint {
+  pointer-events: auto;
+}
+
+.dock-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dock-wrap .card--dock,
+.dock-wrap--open .scrim {
+  pointer-events: auto;
+}
+
+.legend-card,
+.card {
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgb(20 40 44 / 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.legend-card {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  right: 0.85rem;
+  padding: 0.7rem 0.85rem 0.6rem;
+  max-width: 28rem;
+}
+
+.banner {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.85rem;
+  margin: 0.55rem 0 0;
+}
+
+.key div {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.key dt,
+.key dd {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.swatch {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 99px;
+}
+
+.swatch--good { background: var(--ok); }
+.swatch--mixed { background: var(--sand); }
+.swatch--poor { background: var(--coral); }
+.swatch--park {
+  background: transparent;
+  border: 1.5px dashed var(--coral);
+}
+
+.count {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.65rem;
+}
+
+.layers-btn {
+  position: absolute;
+  top: auto;
+  bottom: 5.2rem;
+  left: 0.85rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font: inherit;
+  padding: 0.55rem 0.8rem;
+  cursor: pointer;
+}
+
+.dock-wrap .scrim {
+  display: none;
+}
+
+.dock-head {
+  display: none;
+}
+
+.card--dock {
+  position: absolute;
+  top: 7.6rem;
+  left: 0.85rem;
+  width: min(20.5rem, calc(100vw - 1.7rem));
+  max-height: calc(100% - 9rem);
+  overflow: auto;
+  padding: 0.9rem;
+}
+
+.card--inspect {
+  position: absolute;
+  right: 0.85rem;
+  top: 0.85rem;
+  width: min(22rem, calc(100vw - 1.7rem));
+  max-height: calc(100% - 2rem);
+  overflow: auto;
+  padding: 0.95rem 1rem;
+  display: none;
+}
+
+.card--inspect-open {
+  display: block;
+}
+
+.hint {
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.7rem;
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  padding: 0.25rem 0.45rem;
+  z-index: 800;
+}
+
+.hint a {
+  color: var(--sea);
+}
+
+.text-btn {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--sea);
+  cursor: pointer;
+}
+
+@media (max-width: 859px) {
+  .legend-card {
+    right: 0.85rem;
+    max-width: none;
+  }
+
+  .card--dock {
+    display: none;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    max-height: 72vh;
+    border-radius: 1rem 1rem 0 0;
+    z-index: 4;
+  }
+
+  .dock-wrap--open .card--dock {
+    display: block;
+  }
+
+  .dock-wrap--open .scrim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: rgb(16 30 34 / 0.35);
+    z-index: 3;
+  }
+
+  .dock-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+
+  .card--inspect {
+    display: none;
+    top: auto;
+    right: 0;
+    left: 0;
+    width: auto;
+    max-height: 58vh;
+    border-radius: 1rem 1rem 0 0;
+    z-index: 5;
+  }
+
+  .card--inspect-open {
+    display: block;
+  }
+
+  .layers-btn {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 860px) {
+  .layers-btn,
+  .dock-head,
+  .dock-wrap .scrim {
+    display: none;
+  }
+
+  .card--inspect {
+    top: 0.85rem;
+  }
+
+  .card--inspect-open {
+    display: block;
+  }
+
+  .legend-card {
+    top: 0.85rem;
+    left: calc(20.5rem + 1.7rem);
+    right: auto;
+  }
+}

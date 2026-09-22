@@ -1,0 +1,65 @@
+:host {
+  display: block;
+}
+
+.intro p:last-child {
+  margin: 0;
+  max-width: 38rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.filters {
+  display: block;
+  margin: 1.1rem 0 1rem;
+}
+
+.status {
+  color: var(--ink-soft);
+}
+
+.bad {
+  color: var(--coral);
+}
+
+.places {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.place {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+  padding: 0.9rem 1rem;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.place h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.county,
+.note {
+  margin: 0.15rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.mood {
+  margin: 0.35rem 0 0;
+  font-weight: 600;
+}
+
+.place[data-mood='kind'] .mood { color: var(--ok); }
+.place[data-mood='rough'] .mood { color: var(--coral); }
+
+@media (max-width: 560px) {
+  .place {
+    flex-direction: column;
+  }
+}

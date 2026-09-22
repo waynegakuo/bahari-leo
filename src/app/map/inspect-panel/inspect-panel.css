@@ -1,0 +1,121 @@
+:host {
+  display: block;
+}
+
+.panel {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+h2 {
+  margin: 0.15rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.swahili {
+  margin: 0.2rem 0 0;
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.close {
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.15rem 0;
+}
+
+.status,
+.blurb,
+.senses {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.status--bad {
+  color: var(--coral);
+}
+
+.senses {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.acts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.acts li {
+  font-size: 0.78rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ok) 16%, #fff);
+  color: var(--ok);
+}
+
+.acts--no {
+  background: var(--paper-2);
+  color: var(--ink-soft);
+}
+
+.numbers {
+  border-top: 1px solid var(--line);
+  padding-top: 0.55rem;
+}
+
+.numbers summary {
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem 0.8rem;
+  margin: 0.65rem 0 0;
+}
+
+.metrics dt {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.metrics dd {
+  margin: 0.1rem 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.fine {
+  margin: 0.55rem 0 0;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+}
+
+.panel[data-tone='kind'] h2 {
+  color: var(--ok);
+}
+
+.panel[data-tone='rough'] h2 {
+  color: var(--coral);
+}

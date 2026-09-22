@@ -6,12 +6,12 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "pwani": {
+    "bahari-leo": {
       "projectType": "application",
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "pwani",
+      "prefix": "bahari",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
@@ -26,6 +26,9 @@
             ],
             "styles": [
               "src/styles.css"
+            ],
+            "allowedCommonJsDependencies": [
+              "leaflet"
             ]
           },
           "configurations": {
@@ -33,13 +36,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "750kB",
+                  "maximumError": "1.5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "8kB",
+                  "maximumError": "16kB"
                 }
               ],
               "outputHashing": "all"
@@ -56,10 +59,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "pwani:build:production"
+              "buildTarget": "bahari-leo:build:production"
             },
             "development": {
-              "buildTarget": "pwani:build:development"
+              "buildTarget": "bahari-leo:build:development"
             }
           },
           "defaultConfiguration": "development"

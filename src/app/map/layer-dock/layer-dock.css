@@ -1,0 +1,63 @@
+:host {
+  display: block;
+}
+
+.dock {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.dock .bahari-kicker {
+  margin-top: 0.55rem;
+}
+
+.dock .bahari-kicker:first-child {
+  margin-top: 0;
+}
+
+.pair {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.check {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  align-items: start;
+  font-size: 0.88rem;
+}
+
+.check input {
+  margin-top: 0.28rem;
+  accent-color: var(--sea);
+}
+
+.check strong {
+  display: block;
+  font-weight: 600;
+}
+
+.check em {
+  display: block;
+  font-style: normal;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.date-field {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.date-field input {
+  font: inherit;
+  font-family: var(--font-mono);
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 0.35rem 0.45rem;
+  color: var(--ink);
+}

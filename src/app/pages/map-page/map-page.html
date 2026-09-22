@@ -1,0 +1,59 @@
+<div class="stage">
+  <bahari-coast-map class="map" />
+
+  <div class="chrome">
+    <section class="legend-card" aria-label="How to read the map">
+      <p class="banner">
+        @if (board.todaysPick(); as pick) {
+          Today’s stretch: <strong>{{ pick.site.name }}</strong>.
+          {{ pick.story?.headline ?? 'Tap a pin and we’ll tell you how the sea feels.' }}
+        } @else {
+          Tap a pin. We’ll say how the sea feels — no jargon needed.
+        }
+      </p>
+      <dl class="key">
+        <div><dt class="swatch swatch--good"></dt><dd>Kind</dd></div>
+        <div><dt class="swatch swatch--mixed"></dt><dd>A bit restless</dd></div>
+        <div><dt class="swatch swatch--poor"></dt><dd>Stay on the sand</dd></div>
+        <div><dt class="swatch swatch--park"></dt><dd>Park — don’t fish</dd></div>
+      </dl>
+      <p class="count">
+        @if (board.boardResource.isLoading()) {
+          Listening along the coast…
+        } @else {
+          {{
+            board.favouredCount() > 0
+              ? board.favouredCount() + ' places feel kind right now.'
+              : 'A bit restless along this stretch — still good for the sand.'
+          }}
+          <button type="button" class="text-btn" (click)="goSomewhere()">Take me somewhere</button>
+        }
+      </p>
+    </section>
+
+    <button type="button" class="layers-btn" (click)="toggleLayers()">
+      Change the view
+    </button>
+
+    <div class="dock-wrap" [class.dock-wrap--open]="layersOpen()">
+      <div class="scrim" (click)="closeLayers()"></div>
+      <div class="card card--dock">
+        <div class="dock-head">
+          <p>Layers</p>
+          <button type="button" class="text-btn" (click)="closeLayers()">Done</button>
+        </div>
+        <bahari-layer-dock />
+      </div>
+    </div>
+
+    <div class="card card--inspect" [class.card--inspect-open]="state.panelOpen()">
+      <bahari-inspect-panel />
+    </div>
+  </div>
+
+  <p class="hint">
+    <a routerLink="/">Today</a>
+    ·
+    <a routerLink="/landings">All the beaches</a>
+  </p>
+</div>

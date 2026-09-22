@@ -1,0 +1,26 @@
+<div class="frame" [class.frame--map]="isMap()">
+  <header class="top">
+    <a routerLink="/" class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <span>
+        <strong>Bahari Leo</strong>
+        <small>How the sea feels on Kenya’s coast</small>
+      </span>
+    </a>
+    <nav class="desk" aria-label="Primary">
+      <a routerLink="/" routerLinkActive="on" [routerLinkActiveOptions]="{ exact: true }">Today</a>
+      <a routerLink="/map" routerLinkActive="on">Map</a>
+      <a routerLink="/landings" routerLinkActive="on">Places</a>
+    </nav>
+  </header>
+
+  <main>
+    <router-outlet />
+  </main>
+
+  <nav class="foot" aria-label="Mobile">
+    <a routerLink="/" routerLinkActive="on" [routerLinkActiveOptions]="{ exact: true }">Today</a>
+    <a routerLink="/map" routerLinkActive="on">Map</a>
+    <a routerLink="/landings" routerLinkActive="on">Places</a>
+  </nav>
+</div>

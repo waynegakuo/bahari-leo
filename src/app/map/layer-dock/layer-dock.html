@@ -1,0 +1,57 @@
+<aside class="dock">
+  <p class="bahari-kicker">Where</p>
+  <bahari-region-filter [showSummary]="true" />
+
+  <p class="bahari-kicker">Look of the map</p>
+  <div class="pair">
+    <button type="button" class="bahari-chip" [class.bahari-chip--on]="state.baseMap() === 'chart'" (click)="state.setBaseMap('chart')">
+      Simple
+    </button>
+    <button type="button" class="bahari-chip" [class.bahari-chip--on]="state.baseMap() === 'satellite'" (click)="state.setBaseMap('satellite')">
+      From the sky
+    </button>
+  </div>
+
+  <p class="bahari-kicker">Colour the water</p>
+  <label class="check">
+    <input type="checkbox" [checked]="state.chlorophyll()" (change)="toggle('chlorophyll')" />
+    <span>
+      <strong>Green water</strong>
+      <em>Where tiny plants are growing — fish food, in colour.</em>
+    </span>
+  </label>
+  <label class="check">
+    <input type="checkbox" [checked]="state.sst()" (change)="toggle('sst')" />
+    <span>
+      <strong>Warm and cool patches</strong>
+      <em>How hot the surface of the sea is looking from space.</em>
+    </span>
+  </label>
+  <label class="date-field">
+    <span>Photo date</span>
+    <input type="date" [value]="state.overlayDate()" (change)="onDate($event)" />
+  </label>
+
+  <p class="bahari-kicker">On the coast</p>
+  <label class="check">
+    <input type="checkbox" [checked]="state.model()" (change)="toggle('model')" />
+    <span>
+      <strong>Colour the pins</strong>
+      <em>Green is kind. Sand is restless. Coral means stay on land.</em>
+    </span>
+  </label>
+  <label class="check">
+    <input type="checkbox" [checked]="state.landings()" (change)="toggle('landings')" />
+    <span>
+      <strong>Beaches and harbours</strong>
+      <em>Places people actually go down to the water.</em>
+    </span>
+  </label>
+  <label class="check">
+    <input type="checkbox" [checked]="state.parks()" (change)="toggle('parks')" />
+    <span>
+      <strong>Protected reefs</strong>
+      <em>Look, don’t take. Fishing is not allowed here.</em>
+    </span>
+  </label>
+</aside>

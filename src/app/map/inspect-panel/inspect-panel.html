@@ -1,0 +1,54 @@
+<section class="panel" [attr.data-tone]="board.inspectResource.value()?.story.mood ?? 'restless'">
+  <header class="head">
+    <div>
+      <p class="bahari-kicker">{{ state.selected().label }}</p>
+      @if (board.inspectResource.value(); as reading) {
+        <h2>{{ reading.story.headline }}</h2>
+        <p class="swahili">{{ reading.story.swahili }}</p>
+      } @else {
+        <h2>Listening to the sea…</h2>
+      }
+    </div>
+    <button type="button" class="close" (click)="state.closePanel()" aria-label="Close">
+      Close
+    </button>
+  </header>
+
+  @if (board.inspectResource.isLoading()) {
+    <p class="status">Asking the water what it’s doing…</p>
+  } @else if (board.inspectError(); as message) {
+    <p class="status status--bad">{{ message }}</p>
+  } @else if (board.inspectResource.value(); as reading) {
+    <p class="blurb">{{ reading.story.blurb }}</p>
+    <p class="senses">{{ reading.story.wind }}</p>
+
+    <ul class="acts">
+      @for (act of reading.story.activities; track act.id) {
+        <li [class.acts--no]="!act.ok">{{ act.ok ? 'Yes' : 'Skip' }} · {{ act.label }}</li>
+      }
+    </ul>
+
+    <details class="numbers">
+      <summary>The numbers, if you want them</summary>
+      <dl class="metrics">
+        <div>
+          <dt>Waves</dt>
+          <dd>{{ reading.marine.waveHeightM | measure: '1.1-1' : ' m' }}</dd>
+        </div>
+        <div>
+          <dt>Wind</dt>
+          <dd>{{ reading.marine.windKmh | measure: '1.0-0' : ' km/h' }}</dd>
+        </div>
+        <div>
+          <dt>Water</dt>
+          <dd>{{ reading.marine.sstC | measure: '1.1-1' : ' °C' }}</dd>
+        </div>
+        <div>
+          <dt>Current</dt>
+          <dd>{{ reading.marine.currentMs | measure: '1.2-2' : ' m/s' }}</dd>
+        </div>
+      </dl>
+      <p class="fine">{{ formatCoord(state.selected().lat, state.selected().lon) }}</p>
+    </details>
+  }
+</section>

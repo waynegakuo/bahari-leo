@@ -1,3 +1,117 @@
-/* You can add global styles to this file, and also import other style files */
-
+@import 'leaflet/dist/leaflet.css';
 @import 'tailwindcss';
+
+:root {
+  --ink: #1c2b30;
+  --ink-soft: #5b6b70;
+  --paper: #f3eee4;
+  --paper-2: #e6dfd1;
+  --sea: #1f5f68;
+  --sea-deep: #14343a;
+  --foam: #d7e4e1;
+  --sand: #c4b08a;
+  --coral: #b85c38;
+  --ok: #2f6b4f;
+  --line: #d7d0c3;
+  --font-sans: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: #c5d4d1;
+}
+
+.leaflet-control-attribution {
+  font-size: 10px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+}
+
+.bahari-pin {
+  background: none;
+  border: 0;
+}
+
+.bahari-pin__dot {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  color: #f6f1e8;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 8px rgb(16 30 34 / 0.28);
+  border: 2px solid #f6f1e8;
+}
+
+.bahari-pin__dot--good { background: #2f6b4f; }
+.bahari-pin__dot--mixed { background: #1f5f68; }
+.bahari-pin__dot--poor { background: #8a5a32; }
+.bahari-pin__dot--danger { background: #b85c38; }
+
+.bahari-kicker {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.bahari-chip {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.32rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.bahari-chip--on {
+  background: var(--sea);
+  border-color: var(--sea);
+  color: #f4efe6;
+}
+
+.bahari-page {
+  margin: 0 auto;
+  padding: 1.25rem 1rem 4.5rem;
+  max-width: 42rem;
+}
+
+.bahari-page--wide {
+  max-width: 72rem;
+}
+
+.bahari-page h1 {
+  margin: 0.2rem 0 0.5rem;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  letter-spacing: -0.03em;
+}

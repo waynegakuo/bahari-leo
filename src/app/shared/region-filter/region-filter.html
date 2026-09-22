@@ -1,0 +1,17 @@
+<div class="row" role="radiogroup" aria-label="Coastal area">
+  @for (region of regions; track region.id) {
+    <button
+      type="button"
+      class="bahari-chip"
+      role="radio"
+      [attr.aria-checked]="state.region().id === region.id"
+      [class.bahari-chip--on]="state.region().id === region.id"
+      (click)="select(region.id)"
+    >
+      {{ region.label }}
+    </button>
+  }
+</div>
+@if (showSummary()) {
+  <p class="summary">{{ state.region().summary }}</p>
+}

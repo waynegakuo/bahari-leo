@@ -1,0 +1,59 @@
+<div class="bahari-page today" [attr.data-mood]="featured()?.story?.mood">
+  <header class="hero">
+    <p class="bahari-kicker">{{ greeting }}</p>
+    <bahari-region-filter />
+  </header>
+
+  @if (board.boardResource.isLoading()) {
+    <p class="status">Walking down to the water…</p>
+  } @else if (board.boardResource.error()) {
+    <p class="status bad">Could not hear the sea just now. Try again in a moment.</p>
+  } @else if (featured(); as pick) {
+    <article class="verdict">
+      <p class="place">{{ pick.site.name }} · {{ pick.site.county }}</p>
+      <h1>{{ pick.story?.headline ?? 'Listening…' }}</h1>
+      @if (pick.story; as story) {
+        <p class="swahili">{{ story.swahili }}</p>
+        <p class="blurb">{{ story.blurb }}</p>
+        <p class="senses">{{ story.wind }}</p>
+        <ul class="acts">
+          @for (act of story.activities; track act.id) {
+            <li [class.acts--no]="!act.ok">{{ act.ok ? 'Yes' : 'Skip' }} · {{ act.label }}</li>
+          }
+        </ul>
+      }
+      <div class="actions">
+        <button type="button" class="go" (click)="goThere()">Take me there</button>
+        <button type="button" class="bahari-chip" (click)="another()">Somewhere else</button>
+      </div>
+    </article>
+  }
+
+  <aside class="wildlife">
+    <h2>{{ wildlife().title }}</h2>
+    <p>{{ wildlife().body }}</p>
+    <button type="button" class="bahari-chip" (click)="goWildlife()">{{ wildlife().action }}</button>
+  </aside>
+
+  @if (board.alsoToday().length) {
+    <section class="also">
+      <h2>Also today</h2>
+      <div class="also-grid">
+        @for (row of board.alsoToday(); track row.site.id) {
+          <button type="button" class="mini" [attr.data-mood]="row.story?.mood" (click)="openCard(row)">
+            <strong>{{ row.site.name }}</strong>
+            <span>{{ row.story?.headline }}</span>
+          </button>
+        }
+      </div>
+    </section>
+  }
+
+  <p class="more">
+    <a routerLink="/map">Open the map</a>
+    ·
+    <a routerLink="/landings">All the beaches</a>
+    ·
+    <a routerLink="/sources">How we know</a>
+  </p>
+</div>

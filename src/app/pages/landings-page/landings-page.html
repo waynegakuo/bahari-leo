@@ -1,0 +1,32 @@
+<div class="bahari-page bahari-page--wide">
+  <header class="intro">
+    <p class="bahari-kicker">Places · Sehemu</p>
+    <h1>Where should we go?</h1>
+    <p>
+      Each stretch of coast, in ordinary words. No swell charts — just whether the sea is kind,
+      restless, or asking you to stay on the sand.
+    </p>
+  </header>
+
+  <bahari-region-filter class="filters" />
+
+  @if (board.boardResource.isLoading()) {
+    <p class="status">Walking the coastline…</p>
+  } @else if (board.boardResource.error()) {
+    <p class="status bad">Could not hear the sea just now. Try again in a moment.</p>
+  }
+
+  <div class="places">
+    @for (row of board.rows(); track row.site.id) {
+      <article class="place" [attr.data-mood]="row.story?.mood">
+        <div>
+          <h2>{{ row.site.name }}</h2>
+          <p class="county">{{ row.site.county }}</p>
+          <p class="mood">{{ row.story?.headline ?? 'Still listening…' }}</p>
+          <p class="note">{{ row.story?.waves ?? row.site.note }}</p>
+        </div>
+        <button type="button" class="bahari-chip" (click)="openOnMap(row.site.id)">Show me</button>
+      </article>
+    }
+  </div>
+</div>
