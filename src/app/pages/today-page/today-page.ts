@@ -85,16 +85,10 @@ export class TodayPage {
     },
     loader: ({ params, abortSignal }) => this.ai.fetchEdition(params.placeId, abortSignal),
   });
-  protected readonly featuredStory = computed(() => {
-    const row = this.featured();
-    if (!row?.story) {
-      return null;
-    }
-    const fresh = this.generatedEdition()?.story;
-    return fresh ? { ...row.story, ...fresh } : row.story;
-  });
+  /** Brief copy — from coast board only; never overwritten when edition loads */
+  protected readonly briefStory = computed(() => this.featured()?.story ?? null);
   protected readonly panels = computed(() => {
-    const story = this.featuredStory();
+    const story = this.briefStory();
     if (!story) {
       return [];
     }

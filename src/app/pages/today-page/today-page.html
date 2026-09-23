@@ -68,8 +68,8 @@
                 <bl-mood-pill [mood]="pick.story?.mood ?? null" />
                 <p class="cover-sketch__place">{{ pick.site.name }} · {{ pick.site.county }}</p>
               </header>
-              <h2 class="cover-sketch__headline bl-display">{{ featuredStory()?.headline ?? 'Listening…' }}</h2>
-              @if (featuredStory(); as story) {
+              <h2 class="cover-sketch__headline bl-display">{{ briefStory()?.headline ?? 'Listening…' }}</h2>
+              @if (briefStory(); as story) {
                 <p class="cover-sketch__swahili">{{ story.swahili }}</p>
                 <p class="cover-sketch__blurb">{{ story.blurb }}</p>
                 <div class="cover-sketch__more">
