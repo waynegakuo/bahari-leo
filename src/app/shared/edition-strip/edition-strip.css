@@ -105,8 +105,10 @@
 
 .art {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
   border-radius: var(--bl-sketch-radius-sm);
   background: var(--bl-paper-2);
   display: block;
@@ -114,6 +116,8 @@
 }
 
 .art--placeholder {
+  aspect-ratio: 4 / 3;
+  min-height: 8rem;
   background: repeating-linear-gradient(
     -45deg,
     var(--bl-paper-2),
@@ -200,8 +204,9 @@ figcaption {
 }
 
 :host(.edition-strip--featured) .art {
-  aspect-ratio: 16 / 10;
-  min-height: 10rem;
+  width: 100%;
+  height: auto;
+  max-height: none;
 }
 
 :host(.edition-strip--featured) figcaption {
@@ -250,9 +255,4 @@ figcaption {
     font-size: var(--bl-text-lg);
   }
 
-  :host(.edition-strip--featured) .art {
-    aspect-ratio: 4 / 3;
-    min-height: unset;
-    max-height: 11rem;
-  }
 }

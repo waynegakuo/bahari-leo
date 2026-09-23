@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, resource, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, linkedSignal, resource, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AiEdition } from '../../core/ai-edition';
 import { CoastBoard } from '../../core/coast-board';
@@ -42,11 +42,21 @@ type TodayView = 'brief' | 'edition';
   templateUrl: './today-page.html',
 })
 export class TodayPage {
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      if (this.briefSwapTimer !== undefined) {
+        window.clearTimeout(this.briefSwapTimer);
+      }
+    });
+  }
   protected readonly view = signal<TodayView>('brief');
+  protected readonly briefSwapping = signal(false);
   protected readonly board = inject(CoastBoard);
   private readonly state = inject(CoastState);
   private readonly router = inject(Router);
   private readonly ai = inject(AiEdition);
+  private readonly destroyRef = inject(DestroyRef);
+  private briefSwapTimer: ReturnType<typeof setTimeout> | undefined;
 
   protected readonly greeting = greetingForNow();
   protected readonly atfLoading = computed(
@@ -152,16 +162,45 @@ export class TodayPage {
     const pool = this.board.rows().filter((row) => row.story && row.site.id !== current);
     const next = pool[Math.floor(Math.random() * pool.length)];
     if (next) {
-      this.featured.set(next);
+      this.queueBriefSwap(() => this.featured.set(next));
     }
   }
 
   openCard(row: SiteBoardRow): void {
-    this.featured.set(row);
+    if (row.site.id === this.featured()?.site.id) {
+      return;
+    }
+    this.queueBriefSwap(() => this.featured.set(row));
   }
 
   setView(next: TodayView): void {
     this.view.set(next);
+  }
+
+  private queueBriefSwap(swap: () => void): void {
+    if (this.briefSwapping()) {
+      return;
+    }
+
+    const delayMs = this.briefSwapDelayMs();
+    if (delayMs === 0) {
+      swap();
+      return;
+    }
+
+    this.briefSwapping.set(true);
+    this.briefSwapTimer = window.setTimeout(() => {
+      swap();
+      this.briefSwapping.set(false);
+      this.briefSwapTimer = undefined;
+    }, delayMs);
+  }
+
+  private briefSwapDelayMs(): number {
+    if (typeof window === 'undefined') {
+      return 280;
+    }
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 280;
   }
 
   private fallbackPanels(story: NonNullable<SiteBoardRow['story']>) {

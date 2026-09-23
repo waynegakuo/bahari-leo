@@ -59,35 +59,40 @@
               class="cover-sketch"
               role="tabpanel"
               aria-labelledby="tab-brief"
+              [class.cover-sketch--swapping]="briefSwapping()"
               [attr.data-mood]="pick.story?.mood"
             >
               <bahari-sketch-art kind="sun" size="sm" class="cover-sketch__doodle cover-sketch__doodle--sun" />
               <bahari-sketch-art kind="boat" size="sm" class="cover-sketch__doodle cover-sketch__doodle--boat" />
 
-              <header class="cover-sketch__top">
-                <bl-mood-pill [mood]="pick.story?.mood ?? null" />
-                <p class="cover-sketch__place">{{ pick.site.name }} · {{ pick.site.county }}</p>
-              </header>
-              <h2 class="cover-sketch__headline bl-display">{{ briefStory()?.headline ?? 'Listening…' }}</h2>
-              @if (briefStory(); as story) {
-                <p class="cover-sketch__swahili">{{ story.swahili }}</p>
-                <p class="cover-sketch__blurb">{{ story.blurb }}</p>
-                <div class="cover-sketch__more">
-                  <p class="cover-sketch__wind">{{ story.wind }}</p>
-                  <ul class="cover-sketch__acts">
-                    @for (act of story.activities; track act.id) {
-                      <li>
-                        <bl-badge [tone]="act.ok ? 'ok' : 'neutral'">
-                          {{ act.ok ? 'Yes' : 'Skip' }} · {{ act.label }}
-                        </bl-badge>
-                      </li>
-                    }
-                  </ul>
-                </div>
-              }
+              <div class="cover-sketch__content">
+                <header class="cover-sketch__top">
+                  <bl-mood-pill [mood]="pick.story?.mood ?? null" />
+                  <p class="cover-sketch__place">{{ pick.site.name }} · {{ pick.site.county }}</p>
+                </header>
+                <h2 class="cover-sketch__headline bl-display">{{ briefStory()?.headline ?? 'Listening…' }}</h2>
+                @if (briefStory(); as story) {
+                  <p class="cover-sketch__swahili">{{ story.swahili }}</p>
+                  <p class="cover-sketch__blurb">{{ story.blurb }}</p>
+                  <div class="cover-sketch__more">
+                    <p class="cover-sketch__wind">{{ story.wind }}</p>
+                    <ul class="cover-sketch__acts">
+                      @for (act of story.activities; track act.id) {
+                        <li>
+                          <bl-badge [tone]="act.ok ? 'ok' : 'neutral'">
+                            {{ act.ok ? 'Yes' : 'Skip' }} · {{ act.label }}
+                          </bl-badge>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }
+              </div>
               <div class="cover-sketch__actions">
                 <bl-button (click)="goThere()">Take me there</bl-button>
-                <bl-button variant="secondary" (click)="another()">Somewhere else</bl-button>
+                <bl-button variant="secondary" [disabled]="briefSwapping()" (click)="another()">
+                  Somewhere else
+                </bl-button>
               </div>
             </article>
           } @else {
