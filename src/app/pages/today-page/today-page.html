@@ -7,7 +7,7 @@
     [class.sketch-atf--edition]="view() === 'edition'"
   >
     @if (atfLoading()) {
-      <bahari-ocean-loading class="atf-ocean-load" [message]="atfLoadingMessage()" />
+      <bahari-ocean-loading class="atf-ocean-load" [messages]="coastLoadingMessages" />
     } @else if (board.marineResource.error()) {
       <p class="bl-status bl-status--bad atf-status">Could not hear the sea just now. Try again in a moment.</p>
     } @else if (atfReady() && featured(); as pick) {
@@ -49,7 +49,10 @@
 
         <div class="atf-pane">
           @if (view() === 'edition' && editionResource.isLoading()) {
-            <bahari-ocean-loading class="atf-ocean-load atf-ocean-load--pane" message="Inking today's edition…" />
+            <bahari-ocean-loading
+              class="atf-ocean-load atf-ocean-load--pane"
+              [messages]="editionLoadingMessages"
+            />
           } @else if (view() === 'brief') {
             <article
               id="panel-brief"

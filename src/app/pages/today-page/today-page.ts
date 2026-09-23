@@ -15,7 +15,11 @@ import {
 } from '../../design-system';
 import { EditionStrip } from '../../shared/edition-strip/edition-strip';
 import { SketchArt } from '../../shared/sketch-art/sketch-art';
-import { OceanLoading } from '../../shared/ocean-loading/ocean-loading';
+import {
+  COAST_LOADING_MESSAGES,
+  EDITION_LOADING_MESSAGES,
+  OceanLoading,
+} from '../../shared/ocean-loading/ocean-loading';
 import { StretchDock } from '../../shared/stretch-dock/stretch-dock';
 
 type TodayView = 'brief' | 'edition';
@@ -48,12 +52,8 @@ export class TodayPage {
   protected readonly atfLoading = computed(
     () => this.board.marineLoading() || this.board.aiStoriesLoading(),
   );
-  protected readonly atfLoadingMessage = computed(() => {
-    if (this.board.marineLoading()) {
-      return 'Walking down to the water…';
-    }
-    return 'Writing today\'s story…';
-  });
+  protected readonly coastLoadingMessages = [...COAST_LOADING_MESSAGES];
+  protected readonly editionLoadingMessages = [...EDITION_LOADING_MESSAGES];
   protected readonly atfReady = computed(() => {
     if (this.board.marineResource.error()) {
       return false;

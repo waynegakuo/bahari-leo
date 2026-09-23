@@ -1,121 +1,141 @@
 :host {
+
   display: block;
+
 }
+
+
 
 :host(.atf-ocean-load),
+
 :host(.atf-ocean-load--pane) {
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   width: 100%;
+
 }
+
+
 
 .ocean-load {
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
+
   gap: var(--bl-space-4);
+
   padding: var(--bl-space-4);
+
   text-align: center;
+
 }
 
-.ocean-load__scene {
-  position: relative;
-  width: min(100%, 14rem);
-  height: 7.5rem;
-  color: var(--bl-sea);
+
+
+.ocean-load__spinner {
+
+  width: 2.75rem;
+
+  height: 2.75rem;
+
+  border: 5px solid var(--bl-foam);
+
+  border-top-color: var(--bl-sea);
+
+  border-right-color: var(--bl-tide-light);
+
+  border-radius: 50%;
+
+  animation: ocean-load-spin 0.85s linear infinite;
+
 }
 
-.ocean-load__coast {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  opacity: 0.9;
-  animation: ocean-coast-bob 3.2s ease-in-out infinite;
-}
 
-.ocean-load__waves {
-  position: absolute;
-  left: 12%;
-  bottom: 0.75rem;
-  opacity: 0.75;
-  animation: ocean-waves-drift 2.4s ease-in-out infinite;
-}
-
-.ocean-load__dolphin {
-  position: absolute;
-  right: 8%;
-  top: 0.5rem;
-  opacity: 0.85;
-  animation: ocean-dolphin-leap 2.8s ease-in-out infinite;
-}
-
-.ocean-load__boat {
-  position: absolute;
-  left: 28%;
-  top: 1.25rem;
-  opacity: 0.7;
-  animation: ocean-boat-rock 3s ease-in-out infinite;
-}
 
 .ocean-load__message {
+
   margin: 0;
+
+  min-height: 2.75rem;
+
   max-width: 16rem;
+
   font-size: var(--bl-text-xl);
+
   line-height: 1.25;
+
   color: var(--bl-ink-soft);
+
+  animation: ocean-load-message-in 0.45s ease;
+
 }
 
-@keyframes ocean-coast-bob {
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
+
+
+@keyframes ocean-load-spin {
+
+  to {
+
+    transform: rotate(360deg);
+
   }
-  50% {
-    transform: translateX(-50%) translateY(-4px);
-  }
+
 }
 
-@keyframes ocean-waves-drift {
-  0%,
-  100% {
-    transform: translateX(0) rotate(0deg);
+
+
+@keyframes ocean-load-message-in {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(4px);
+
   }
-  50% {
-    transform: translateX(6px) rotate(-2deg);
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
   }
+
 }
 
-@keyframes ocean-dolphin-leap {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  40% {
-    transform: translateY(-8px) rotate(-6deg);
-  }
-  70% {
-    transform: translateY(-2px) rotate(3deg);
-  }
-}
 
-@keyframes ocean-boat-rock {
-  0%,
-  100% {
-    transform: rotate(-4deg) translateY(0);
-  }
-  50% {
-    transform: rotate(4deg) translateY(-3px);
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
-  .ocean-load__coast,
-  .ocean-load__waves,
-  .ocean-load__dolphin,
-  .ocean-load__boat {
+
+  .ocean-load__spinner {
+
     animation: none;
+
+    border-top-color: var(--bl-sea);
+
+    border-right-color: var(--bl-sea);
+
   }
+
+
+
+  .ocean-load__message {
+
+    animation: none;
+
+  }
+
 }
+
+
