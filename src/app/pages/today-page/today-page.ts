@@ -15,6 +15,7 @@ import {
 } from '../../design-system';
 import { EditionStrip } from '../../shared/edition-strip/edition-strip';
 import { SketchArt } from '../../shared/sketch-art/sketch-art';
+import { OceanLoading } from '../../shared/ocean-loading/ocean-loading';
 import { StretchDock } from '../../shared/stretch-dock/stretch-dock';
 
 type TodayView = 'brief' | 'edition';
@@ -22,6 +23,7 @@ type TodayView = 'brief' | 'edition';
 @Component({
   imports: [
     StretchDock,
+    OceanLoading,
     RouterLink,
     EditionStrip,
     SketchArt,
@@ -43,6 +45,31 @@ export class TodayPage {
   private readonly ai = inject(AiEdition);
 
   protected readonly greeting = greetingForNow();
+  protected readonly atfLoading = computed(
+    () => this.board.marineLoading() || this.board.aiStoriesLoading(),
+  );
+  protected readonly atfLoadingMessage = computed(() => {
+    if (this.board.marineLoading()) {
+      return 'Walking down to the water…';
+    }
+    return 'Writing today\'s story…';
+  });
+  protected readonly atfReady = computed(() => {
+    if (this.board.marineResource.error()) {
+      return false;
+    }
+    if (!this.board.marineResource.hasValue()) {
+      return false;
+    }
+    if (
+      this.ai.configured() &&
+      !this.board.storyCopiesResource.hasValue() &&
+      !this.board.storyCopiesResource.error()
+    ) {
+      return false;
+    }
+    return Boolean(this.featured());
+  });
   /** Resets to today's pick when the region changes; user can override via also-today / somewhere else */
   protected readonly featured = linkedSignal({
     source: () => this.state.region().id,

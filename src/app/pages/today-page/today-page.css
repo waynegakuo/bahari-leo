@@ -24,6 +24,27 @@
   padding: var(--bl-space-3);
 }
 
+.sketch-atf--loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100dvh - 7.5rem - env(safe-area-inset-bottom));
+}
+
+.atf-ocean-load {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.atf-pane:has(> .atf-ocean-load--pane) {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100dvh - 11rem - env(safe-area-inset-bottom));
+}
+
 /* Tabbed shell — brief + edition share the viewport */
 .atf-shell {
   display: flex;
@@ -299,6 +320,14 @@
 }
 
 @media (min-width: 860px) {
+  .sketch-atf--loading {
+    min-height: calc(100dvh - 5.5rem);
+  }
+
+  .atf-pane:has(> .atf-ocean-load--pane) {
+    min-height: calc(100dvh - 13rem);
+  }
+
   .sketch-atf {
     max-width: none;
     width: 100%;

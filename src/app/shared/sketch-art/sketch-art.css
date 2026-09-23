@@ -22,6 +22,10 @@ svg {
   width: 100%;
 }
 
+:host-context(.ocean-load__scene) svg {
+  width: 100%;
+}
+
 :host([data-size='md']) svg {
   width: 4rem;
 }

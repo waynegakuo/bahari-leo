@@ -13,27 +13,58 @@ export class CoastBoard {
   private readonly api = inject(MarineApi);
   private readonly ai = inject(AiEdition);
 
-  readonly boardResource = resource({
-    params: () => ({
-      sites: this.state.sites(),
-      aiStories: this.ai.configured(),
-    }),
+  readonly marineResource = resource({
+    params: () => this.state.sites(),
     loader: async ({ params, abortSignal }): Promise<SiteBoardRow[]> => {
-      const snapshots = await this.api.fetchSites(params.sites, abortSignal);
-      let rows = toBoardRows(params.sites, snapshots);
-      if (params.aiStories && rows.length) {
-        try {
-          const copies = await this.ai.fetchStoryCopies(
-            params.sites.map((site) => site.id),
-            abortSignal,
-          );
-          rows = mergeStoryCopies(rows, copies);
-        } catch (err) {
-          console.warn('AI story copy failed; using template brief', err);
-        }
-      }
-      return rows;
+      const snapshots = await this.api.fetchSites(params, abortSignal);
+      return toBoardRows(params, snapshots);
     },
+  });
+
+  readonly storyCopiesResource = resource({
+    params: () => {
+      if (!this.ai.configured() || !this.marineResource.hasValue()) {
+        return undefined;
+      }
+      const rows = this.marineResource.value();
+      if (!rows?.length) {
+        return undefined;
+      }
+      return rows.map((row) => row.site.id);
+    },
+    loader: async ({ params, abortSignal }) =>
+      this.ai.fetchStoryCopies(params, abortSignal),
+  });
+
+  /** @deprecated Use marineResource / storyCopiesResource — kept for other pages */
+  readonly boardResource = {
+    isLoading: () => this.isBoardLoading(),
+    error: () => this.marineResource.error() ?? this.storyCopiesResource.error(),
+    hasValue: () => this.marineResource.hasValue() && this.storiesReady(),
+  };
+
+  readonly isBoardLoading = computed(
+    () =>
+      this.marineResource.isLoading() ||
+      (this.ai.configured() && this.storyCopiesResource.isLoading()),
+  );
+
+  readonly aiStoriesLoading = computed(
+    () => this.ai.configured() && this.storyCopiesResource.isLoading(),
+  );
+
+  readonly marineLoading = computed(() => this.marineResource.isLoading());
+
+  readonly rows = computed(() => {
+    const base = this.marineResource.value();
+    if (!base) {
+      return [];
+    }
+    const copies = this.storyCopiesResource.value();
+    if (copies) {
+      return mergeStoryCopies(base, copies);
+    }
+    return base;
   });
 
   readonly inspectResource = resource({
@@ -45,7 +76,6 @@ export class CoastBoard {
     },
   });
 
-  readonly rows = computed(() => this.boardResource.value() ?? []);
   readonly favouredCount = computed(
     () => this.rows().filter((row) => row.story?.mood === 'kind').length,
   );
@@ -69,6 +99,16 @@ export class CoastBoard {
     }
     this.state.selectSite(pick.site.id);
     return pick;
+  }
+
+  private storiesReady(): boolean {
+    if (!this.marineResource.hasValue()) {
+      return false;
+    }
+    if (!this.ai.configured()) {
+      return true;
+    }
+    return this.storyCopiesResource.hasValue() || Boolean(this.storyCopiesResource.error());
   }
 }
 

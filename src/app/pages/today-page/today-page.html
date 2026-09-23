@@ -1,12 +1,16 @@
 <div class="sketch-page">
   <bahari-stretch-dock [greeting]="greeting" title="How the sea feels today" />
 
-  <section class="sketch-atf" [class.sketch-atf--edition]="view() === 'edition'">
-    @if (board.boardResource.isLoading()) {
-      <p class="bl-status atf-status">Walking down to the water…</p>
-    } @else if (board.boardResource.error()) {
+  <section
+    class="sketch-atf"
+    [class.sketch-atf--loading]="atfLoading()"
+    [class.sketch-atf--edition]="view() === 'edition'"
+  >
+    @if (atfLoading()) {
+      <bahari-ocean-loading class="atf-ocean-load" [message]="atfLoadingMessage()" />
+    } @else if (board.marineResource.error()) {
       <p class="bl-status bl-status--bad atf-status">Could not hear the sea just now. Try again in a moment.</p>
-    } @else if (featured(); as pick) {
+    } @else if (atfReady() && featured(); as pick) {
       <div class="atf-shell">
         <div class="atf-tabs" role="tablist" aria-label="Today's story">
           <button
@@ -44,7 +48,9 @@
         </div>
 
         <div class="atf-pane">
-          @if (view() === 'brief') {
+          @if (view() === 'edition' && editionResource.isLoading()) {
+            <bahari-ocean-loading class="atf-ocean-load atf-ocean-load--pane" message="Inking today's edition…" />
+          } @else if (view() === 'brief') {
             <article
               id="panel-brief"
               class="cover-sketch"
@@ -103,10 +109,12 @@
       </div>
     }
 
-    <p class="scroll-hint" aria-hidden="true">
-      <bahari-sketch-art kind="dolphin" size="sm" />
-      <span>Scroll for wildlife & more</span>
-    </p>
+    @if (!atfLoading() && atfReady()) {
+      <p class="scroll-hint" aria-hidden="true">
+        <bahari-sketch-art kind="dolphin" size="sm" />
+        <span>Scroll for wildlife & more</span>
+      </p>
+    }
   </section>
 
   <div class="sketch-body">

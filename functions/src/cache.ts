@@ -58,8 +58,15 @@ function mergeImages(edition: ComicEdition, images: Map<number, string>): ComicE
   };
 }
 
+/** Comic editions are 6 panels — older 3-panel caches must be upgraded. */
+export const EDITION_PANEL_COUNT = 6;
+
 export function editionHasAllImages(edition: ComicEdition): boolean {
   return edition.panels.length > 0 && edition.panels.every((panel) => Boolean(panel.imageUrl));
+}
+
+export function editionIsComplete(edition: ComicEdition): boolean {
+  return edition.panels.length === EDITION_PANEL_COUNT && editionHasAllImages(edition);
 }
 
 export async function readCachedEdition(placeId: string): Promise<ComicEdition | null> {

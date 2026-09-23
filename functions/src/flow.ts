@@ -2,10 +2,10 @@ import { generatePanelArt } from './agents/panel-art-agent';
 import { generateSeaStoryCopy } from './agents/sea-copy-agent';
 import { generateStoryEdition } from './agents/story-agent';
 import {
-  editionHasAllImages,
+  editionIsComplete,
+  EDITION_PANEL_COUNT,
   readCachedEdition,
   writeCachedEdition,
-  writePanelImages,
 } from './cache';
 import { buildBriefForPlace } from './sea/brief';
 import { ComicEdition, ComicPanel, SeaStoryBrief } from './sea/types';
@@ -31,20 +31,30 @@ export async function generateCoastalEdition({ placeId }: { placeId: string }): 
   const storyCopy = await generateSeaStoryCopy(brief);
   const cached = await readCachedEdition(placeId);
 
-  if (cached && editionHasAllImages(cached)) {
+  if (cached && editionIsComplete(cached)) {
     return { ...cached, story: storyCopy };
   }
 
-  if (cached) {
-    const panels = await attachPanelArt(cached.panels, brief);
-    const edition: ComicEdition = { ...cached, panels, story: storyCopy };
-    await writePanelImages(placeId, panels);
-    return edition;
+  let draft: Pick<ComicEdition, 'editionTitle' | 'panels' | 'footer'>;
+
+  if (cached?.panels.length === EDITION_PANEL_COUNT) {
+    // Six-panel script cached but some images missing — fill gaps only.
+    draft = cached;
+  } else {
+    // Stale or missing cache (e.g. old 3-panel editions) — new 6-panel script.
+    const generated = await generateStoryEdition(brief);
+    draft = {
+      editionTitle: generated.editionTitle,
+      footer: generated.footer,
+      panels: generated.panels.map((panel, index) => ({
+        ...panel,
+        imageUrl: cached?.panels[index]?.imageUrl,
+      })),
+    };
   }
 
-  const story = await generateStoryEdition(brief);
-  const panels = await attachPanelArt(story.panels, brief);
-  const edition: ComicEdition = { ...story, panels, story: storyCopy };
+  const panels = await attachPanelArt(draft.panels, brief);
+  const edition: ComicEdition = { ...draft, panels, story: storyCopy };
   await writeCachedEdition(placeId, edition);
   return edition;
 }
