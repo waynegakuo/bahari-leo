@@ -29,6 +29,13 @@ yarn-error.log
 !.vscode/mcp.json
 .history/*
 
+# Firebase / Functions
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+functions/lib/
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/
@@ -42,3 +49,5 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+/docs/
