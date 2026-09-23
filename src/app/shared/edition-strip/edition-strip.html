@@ -1,0 +1,34 @@
+@if (panels().length) {
+  <section class="comic" aria-label="Today’s comic edition">
+    <header class="masthead">
+      <p class="bahari-kicker">{{ generated() ? 'Today’s comic · Toleo la bahari' : 'Today’s edition' }}</p>
+      @if (title(); as line) {
+        <h2 class="title">{{ line }}</h2>
+      }
+      @if (loading()) {
+        <p class="status">The artist is inking the panels…</p>
+      }
+    </header>
+
+    <div class="grid">
+      @for (panel of panels(); track $index) {
+        <figure class="panel">
+          <span class="panel-no">{{ $index + 1 }}</span>
+          <p class="kicker">{{ labelFor($index) }}</p>
+          @if (panel.imageUrl) {
+            <img class="art" [src]="panel.imageUrl" [alt]="labelFor($index) + ' — ' + panel.caption" loading="lazy" />
+          } @else if (generated()) {
+            <div class="art art--placeholder" aria-hidden="true"></div>
+          }
+          <blockquote class="bubble">
+            <figcaption>{{ panel.caption }}</figcaption>
+          </blockquote>
+        </figure>
+      }
+    </div>
+
+    @if (footer(); as line) {
+      <p class="footer">{{ line }}</p>
+    }
+  </section>
+}

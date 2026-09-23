@@ -1,0 +1,129 @@
+:host {
+  display: block;
+}
+
+.comic {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 1.05rem 1.1rem;
+  border: 2px solid var(--ink);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--paper) 88%, #fff), #fff),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 4px,
+      color-mix(in srgb, var(--line) 35%, transparent) 4px,
+      color-mix(in srgb, var(--line) 35%, transparent) 5px
+    );
+}
+
+.masthead {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.status {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+}
+
+.grid {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.panel {
+  position: relative;
+  margin: 0;
+  padding: 0.85rem 0.8rem 0.9rem;
+  border: 2px solid var(--ink);
+  background: #fff;
+  display: grid;
+  gap: 0.4rem;
+  min-height: 6.5rem;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+.panel-no {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.kicker {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sea);
+}
+
+.art {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1.5px solid var(--ink);
+  background: var(--paper-2);
+  display: block;
+}
+
+.art--placeholder {
+  background: linear-gradient(135deg, var(--paper-2), color-mix(in srgb, var(--foam) 60%, #fff));
+}
+
+.bubble {
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 0.65rem;
+  background: var(--paper);
+  position: relative;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  left: 1.1rem;
+  bottom: -0.45rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  background: var(--paper);
+  border-right: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  transform: rotate(45deg);
+}
+
+figcaption {
+  margin: 0;
+  line-height: 1.45;
+  font-size: 0.92rem;
+  font-style: italic;
+}
+
+.footer {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  border-top: 1px dashed var(--line);
+  padding-top: 0.55rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "bahari-leo-functions",
+  "private": true,
+  "main": "lib/index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions,firestore",
+    "genkit:start": "genkit start -- npx tsx --watch src/index.ts"
+  },
+  "dependencies": {
+    "@genkit-ai/firebase": "^1.42.0",
+    "@genkit-ai/google-genai": "^1.42.0",
+    "firebase-admin": "^14.4.0",
+    "firebase-functions": "^7.4.0",
+    "genkit": "^1.42.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

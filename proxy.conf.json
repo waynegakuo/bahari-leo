@@ -1,0 +1,10 @@
+{
+  "/ai": {
+    "target": "http://127.0.0.1:5001/bahari-leo/africa-south1",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/ai": ""
+    }
+  }
+}
