@@ -1,32 +1,52 @@
-<div class="bahari-page bahari-page--wide">
-  <header class="intro">
-    <p class="bahari-kicker">Places · Sehemu</p>
-    <h1>Where should we go?</h1>
-    <p>
+<div class="places-page">
+  <header class="places-hero">
+    <bl-kicker>Places · Sehemu</bl-kicker>
+    <h1 class="bl-display">Where should we go?</h1>
+    <p class="places-hero__sub">
       Each stretch of coast, in ordinary words. No swell charts — just whether the sea is kind,
       restless, or asking you to stay on the sand.
     </p>
   </header>
 
-  <bahari-region-filter class="filters" />
+  <div class="places-filter chip-light">
+    <p class="places-filter__label">Which stretch of coast?</p>
+    <bahari-region-filter class="filters" [showSummary]="true" />
+  </div>
 
   @if (board.boardResource.isLoading()) {
-    <p class="status">Walking the coastline…</p>
+    <p class="bl-status">Walking the coastline…</p>
   } @else if (board.boardResource.error()) {
-    <p class="status bad">Could not hear the sea just now. Try again in a moment.</p>
+    <p class="bl-status bl-status--bad">Could not hear the sea just now. Try again in a moment.</p>
   }
 
-  <div class="places">
+  <ul class="places-list">
     @for (row of board.rows(); track row.site.id) {
-      <article class="place" [attr.data-mood]="row.story?.mood">
-        <div>
-          <h2>{{ row.site.name }}</h2>
-          <p class="county">{{ row.site.county }}</p>
-          <p class="mood">{{ row.story?.headline ?? 'Still listening…' }}</p>
+      <li>
+        <bl-card
+          [mood]="row.story?.mood ?? null"
+          [interactive]="true"
+          padding="md"
+          (click)="openOnMap(row.site.id)"
+        >
+          <div class="place-row">
+            <div>
+              <h2 class="place-name bl-display">{{ row.site.name }}</h2>
+              <p class="county">{{ row.site.county }}</p>
+            </div>
+            @if (row.story?.mood; as mood) {
+              <bl-mood-pill [mood]="mood" />
+            }
+          </div>
+          <p
+            class="mood-line"
+            [class.bl-mood-kind]="row.story?.mood === 'kind'"
+            [class.bl-mood-rough]="row.story?.mood === 'rough'"
+          >
+            {{ row.story?.headline ?? 'Still listening…' }}
+          </p>
           <p class="note">{{ row.story?.waves ?? row.site.note }}</p>
-        </div>
-        <button type="button" class="bahari-chip" (click)="openOnMap(row.site.id)">Show me</button>
-      </article>
+        </bl-card>
+      </li>
     }
-  </div>
+  </ul>
 </div>

@@ -1,20 +1,38 @@
 import { computed, inject, Injectable, resource } from '@angular/core';
+import { AiEdition } from './ai-edition';
 import { scoreConditions, toBoardRows } from './advisory';
 import { CoastState } from './coast-state';
 import { MarineApi } from './marine-api';
 import { FORECAST_UNAVAILABLE, InspectReading, SiteBoardRow } from './models';
 import { tellSeaStory } from './plain-speak';
+import { mergeStoryCopies } from './story-copy';
 
 @Injectable({ providedIn: 'root' })
 export class CoastBoard {
   private readonly state = inject(CoastState);
   private readonly api = inject(MarineApi);
+  private readonly ai = inject(AiEdition);
 
   readonly boardResource = resource({
-    params: () => this.state.sites(),
+    params: () => ({
+      sites: this.state.sites(),
+      aiStories: this.ai.configured(),
+    }),
     loader: async ({ params, abortSignal }): Promise<SiteBoardRow[]> => {
-      const snapshots = await this.api.fetchSites(params, abortSignal);
-      return toBoardRows(params, snapshots);
+      const snapshots = await this.api.fetchSites(params.sites, abortSignal);
+      let rows = toBoardRows(params.sites, snapshots);
+      if (params.aiStories && rows.length) {
+        try {
+          const copies = await this.ai.fetchStoryCopies(
+            params.sites.map((site) => site.id),
+            abortSignal,
+          );
+          rows = mergeStoryCopies(rows, copies);
+        } catch (err) {
+          console.warn('AI story copy failed; using template brief', err);
+        }
+      }
+      return rows;
     },
   });
 

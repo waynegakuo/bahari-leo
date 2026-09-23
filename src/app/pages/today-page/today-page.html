@@ -1,67 +1,150 @@
-<div class="bahari-page today" [attr.data-mood]="featured()?.story?.mood">
-  <header class="hero">
-    <p class="bahari-kicker">{{ greeting }}</p>
-    <bahari-region-filter />
-  </header>
+<div class="sketch-page">
+  <bahari-stretch-dock [greeting]="greeting" title="How the sea feels today" />
 
-  @if (board.boardResource.isLoading()) {
-    <p class="status">Walking down to the water…</p>
-  } @else if (board.boardResource.error()) {
-    <p class="status bad">Could not hear the sea just now. Try again in a moment.</p>
-  } @else if (featured(); as pick) {
-    <article class="verdict">
-      <p class="place">{{ pick.site.name }} · {{ pick.site.county }}</p>
-      <h1>{{ pick.story?.headline ?? 'Listening…' }}</h1>
-      @if (pick.story; as story) {
-        <p class="swahili">{{ story.swahili }}</p>
-        <p class="blurb">{{ story.blurb }}</p>
-        <p class="senses">{{ story.wind }}</p>
-        <ul class="acts">
-          @for (act of story.activities; track act.id) {
-            <li [class.acts--no]="!act.ok">{{ act.ok ? 'Yes' : 'Skip' }} · {{ act.label }}</li>
-          }
-        </ul>
-      }
-      <div class="actions">
-        <button type="button" class="go" (click)="goThere()">Take me there</button>
-        <button type="button" class="bahari-chip" (click)="another()">Somewhere else</button>
-      </div>
-    </article>
-
-    <bahari-edition-strip
-      [panels]="panels()"
-      [title]="editionTitle()"
-      [footer]="editionFooter()"
-      [loading]="editionResource.isLoading()"
-      [generated]="editionIsGenerated()"
-    />
-  }
-
-  <aside class="wildlife">
-    <h2>{{ wildlife().title }}</h2>
-    <p>{{ wildlife().body }}</p>
-    <button type="button" class="bahari-chip" (click)="goWildlife()">{{ wildlife().action }}</button>
-  </aside>
-
-  @if (board.alsoToday().length) {
-    <section class="also">
-      <h2>Also today</h2>
-      <div class="also-grid">
-        @for (row of board.alsoToday(); track row.site.id) {
-          <button type="button" class="mini" [attr.data-mood]="row.story?.mood" (click)="openCard(row)">
-            <strong>{{ row.site.name }}</strong>
-            <span>{{ row.story?.headline }}</span>
+  <section class="sketch-atf" [class.sketch-atf--edition]="view() === 'edition'">
+    @if (board.boardResource.isLoading()) {
+      <p class="bl-status atf-status">Walking down to the water…</p>
+    } @else if (board.boardResource.error()) {
+      <p class="bl-status bl-status--bad atf-status">Could not hear the sea just now. Try again in a moment.</p>
+    } @else if (featured(); as pick) {
+      <div class="atf-shell">
+        <div class="atf-tabs" role="tablist" aria-label="Today's story">
+          <button
+            type="button"
+            class="atf-tab"
+            role="tab"
+            id="tab-brief"
+            aria-controls="panel-brief"
+            [class.atf-tab--on]="view() === 'brief'"
+            [attr.aria-selected]="view() === 'brief'"
+            (click)="setView('brief')"
+          >
+            <bahari-sketch-art kind="waves" size="sm" class="atf-tab__art" />
+            <span class="atf-tab__text">
+              <span class="atf-tab__title">The brief</span>
+              <small class="atf-tab__sub">Muhtasari</small>
+            </span>
           </button>
-        }
-      </div>
-    </section>
-  }
+          <button
+            type="button"
+            class="atf-tab"
+            role="tab"
+            id="tab-edition"
+            aria-controls="panel-edition"
+            [class.atf-tab--on]="view() === 'edition'"
+            [attr.aria-selected]="view() === 'edition'"
+            (click)="setView('edition')"
+          >
+            <bahari-sketch-art kind="fish" size="sm" class="atf-tab__art" />
+            <span class="atf-tab__text">
+              <span class="atf-tab__title">Today's edition</span>
+              <small class="atf-tab__sub">Toleo la bahari</small>
+            </span>
+          </button>
+        </div>
 
-  <p class="more">
-    <a routerLink="/map">Open the map</a>
-    ·
-    <a routerLink="/landings">All the beaches</a>
-    ·
-    <a routerLink="/sources">How we know</a>
-  </p>
+        <div class="atf-pane">
+          @if (view() === 'brief') {
+            <article
+              id="panel-brief"
+              class="cover-sketch"
+              role="tabpanel"
+              aria-labelledby="tab-brief"
+              [attr.data-mood]="pick.story?.mood"
+            >
+              <bahari-sketch-art kind="sun" size="sm" class="cover-sketch__doodle cover-sketch__doodle--sun" />
+              <bahari-sketch-art kind="boat" size="sm" class="cover-sketch__doodle cover-sketch__doodle--boat" />
+
+              <header class="cover-sketch__top">
+                <bl-mood-pill [mood]="pick.story?.mood ?? null" />
+                <p class="cover-sketch__place">{{ pick.site.name }} · {{ pick.site.county }}</p>
+              </header>
+              <h2 class="cover-sketch__headline bl-display">{{ featuredStory()?.headline ?? 'Listening…' }}</h2>
+              @if (featuredStory(); as story) {
+                <p class="cover-sketch__swahili">{{ story.swahili }}</p>
+                <p class="cover-sketch__blurb">{{ story.blurb }}</p>
+                <div class="cover-sketch__more">
+                  <p class="cover-sketch__wind">{{ story.wind }}</p>
+                  <ul class="cover-sketch__acts">
+                    @for (act of story.activities; track act.id) {
+                      <li>
+                        <bl-badge [tone]="act.ok ? 'ok' : 'neutral'">
+                          {{ act.ok ? 'Yes' : 'Skip' }} · {{ act.label }}
+                        </bl-badge>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+              <div class="cover-sketch__actions">
+                <bl-button (click)="goThere()">Take me there</bl-button>
+                <bl-button variant="secondary" (click)="another()">Somewhere else</bl-button>
+              </div>
+            </article>
+          } @else {
+            <section
+              id="panel-edition"
+              class="atf-edition"
+              role="tabpanel"
+              aria-labelledby="tab-edition"
+            >
+              <bahari-edition-strip
+                class="atf-edition__strip"
+                [featured]="true"
+                [panels]="panels()"
+                [title]="editionTitle()"
+                [footer]="editionFooter()"
+                [loading]="editionResource.isLoading()"
+                [generated]="editionIsGenerated()"
+              />
+            </section>
+          }
+        </div>
+      </div>
+    }
+
+    <p class="scroll-hint" aria-hidden="true">
+      <bahari-sketch-art kind="dolphin" size="sm" />
+      <span>Scroll for wildlife & more</span>
+    </p>
+  </section>
+
+  <div class="sketch-body">
+    <div class="sketch-rail">
+      <bl-card tone="foam" padding="md" class="rail__wildlife bl-wobble-3">
+        <div class="rail__head">
+          <bl-kicker>Wildlife · Wanyama wa bahari</bl-kicker>
+          <bahari-sketch-art kind="dolphin" size="md" />
+        </div>
+        <h3 class="rail-title bl-display">{{ wildlife().title }}</h3>
+        <p class="rail-body">{{ wildlife().body }}</p>
+        <bl-button variant="ghost" size="sm" (click)="goWildlife()">{{ wildlife().action }} →</bl-button>
+      </bl-card>
+
+      @if (board.alsoToday().length) {
+        <bl-card tone="default" padding="md" class="bl-wobble-1">
+          <bl-kicker>Also today · Pia leo</bl-kicker>
+          <ul class="also-sketch">
+            @for (row of board.alsoToday(); track row.site.id) {
+              <li>
+                <button type="button" class="also-sketch__row" [attr.data-mood]="row.story?.mood" (click)="openCard(row)">
+                  <span class="also-sketch__scribble" aria-hidden="true">~</span>
+                  <span class="also-sketch__text">
+                    <strong>{{ row.site.name }}</strong>
+                    <span>{{ row.story?.headline }}</span>
+                  </span>
+                </button>
+              </li>
+            }
+          </ul>
+        </bl-card>
+      }
+    </div>
+
+    <nav class="sketch-nav">
+      <a routerLink="/map">Open the map</a>
+      <a routerLink="/landings">All the beaches</a>
+      <a routerLink="/sources">How we know</a>
+    </nav>
+  </div>
 </div>

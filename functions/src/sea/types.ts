@@ -56,6 +56,8 @@ export interface SeaStory {
   activities: ActivityHint[];
 }
 
+export type SeaStoryCopy = Pick<SeaStory, 'mood' | 'headline' | 'swahili' | 'blurb' | 'waves' | 'wind' | 'water'>;
+
 export interface SeaStoryBrief {
   app: {
     name: 'Bahari Leo';
@@ -70,6 +72,11 @@ export interface SeaStoryBrief {
     watch?: 'dolphins';
   };
   story: Pick<SeaStory, 'mood' | 'headline' | 'swahili' | 'blurb' | 'waves' | 'wind' | 'water'>;
+  measurements: {
+    waveHeightM: number | null;
+    windKmh: number | null;
+    sstC: number | null;
+  };
   activities: ActivityHint[];
   wildlife: {
     whaleSeason: boolean;
@@ -91,4 +98,6 @@ export interface ComicEdition {
   editionTitle: string;
   panels: ComicPanel[];
   footer: string;
+  /** Fresh AI wording for the brief — regenerated each request */
+  story?: SeaStoryCopy;
 }

@@ -1,15 +1,11 @@
-<div class="row" role="radiogroup" aria-label="Coastal area">
+<div class="row" [class.row--stack]="layout() === 'stack'" role="radiogroup" aria-label="Coastal area">
   @for (region of regions; track region.id) {
-    <button
-      type="button"
-      class="bahari-chip"
-      role="radio"
-      [attr.aria-checked]="state.region().id === region.id"
-      [class.bahari-chip--on]="state.region().id === region.id"
-      (click)="select(region.id)"
+    <bl-chip
+      [selected]="state.region().id === region.id"
+      (selectedChange)="select(region.id)"
     >
       {{ region.label }}
-    </button>
+    </bl-chip>
   }
 </div>
 @if (showSummary()) {

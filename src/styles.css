@@ -1,34 +1,36 @@
 @import 'leaflet/dist/leaflet.css';
 @import 'tailwindcss';
-
-:root {
-  --ink: #1c2b30;
-  --ink-soft: #5b6b70;
-  --paper: #f3eee4;
-  --paper-2: #e6dfd1;
-  --sea: #1f5f68;
-  --sea-deep: #14343a;
-  --foam: #d7e4e1;
-  --sand: #c4b08a;
-  --coral: #b85c38;
-  --ok: #2f6b4f;
-  --line: #d7d0c3;
-  --font-sans: 'IBM Plex Sans', 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-}
+@import './design-system/tokens.css';
+@import './design-system/sketch.css';
+@import './design-system/utilities.css';
 
 html,
 body {
   height: 100%;
 }
 
+body.stretch-dock-open {
+  overflow: hidden;
+}
+
 body {
   margin: 0;
-  color: var(--ink);
-  background: var(--paper);
-  font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.4;
+  color: var(--bl-ink);
+  background-color: var(--bl-paper);
+  background-image:
+    radial-gradient(circle at 15% 20%, rgb(42 37 32 / 0.025) 0%, transparent 6%),
+    radial-gradient(circle at 85% 60%, rgb(42 37 32 / 0.02) 0%, transparent 5%),
+    radial-gradient(circle at 50% 90%, rgb(42 122 122 / 0.04) 0%, transparent 40%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      rgb(42 37 32 / 0.03) 27px,
+      rgb(42 37 32 / 0.03) 28px
+    );
+  font-family: var(--bl-font-sans);
+  font-size: var(--bl-text-base);
+  line-height: var(--bl-leading-normal);
 }
 
 * {
@@ -41,13 +43,15 @@ input {
 }
 
 .leaflet-container {
-  font-family: var(--font-sans);
-  background: #c5d4d1;
+  font-family: var(--bl-font-sans);
+  background: var(--bl-foam);
 }
 
 .leaflet-control-attribution {
   font-size: 10px;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  background: var(--bl-surface);
+  border: 2px solid var(--bl-ink);
+  border-radius: var(--bl-sketch-radius-sm);
 }
 
 .bahari-pin {
@@ -58,60 +62,62 @@ input {
 .bahari-pin__dot {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  color: #f6f1e8;
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 45% 55% 48% / 48% 52% 45% 55%;
+  color: #fff;
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  box-shadow: 0 2px 8px rgb(16 30 34 / 0.28);
-  border: 2px solid #f6f1e8;
+  font-weight: 700;
+  border: 2.5px solid var(--bl-ink);
+  box-shadow: var(--bl-sketch-shadow);
 }
 
-.bahari-pin__dot--good { background: #2f6b4f; }
-.bahari-pin__dot--mixed { background: #1f5f68; }
-.bahari-pin__dot--poor { background: #8a5a32; }
-.bahari-pin__dot--danger { background: #b85c38; }
+.bahari-pin__dot--good { background: var(--bl-kind); }
+.bahari-pin__dot--mixed { background: var(--bl-sea); }
+.bahari-pin__dot--poor { background: var(--bl-restless); }
+.bahari-pin__dot--danger { background: var(--bl-rough); }
 
 .bahari-kicker {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-lg);
+  font-weight: 600;
+  color: var(--bl-ink-muted);
 }
 
 .bahari-chip {
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--ink);
+  border: var(--bl-sketch-border);
+  border-radius: var(--bl-radius-pill);
+  background: var(--bl-surface);
+  color: var(--bl-ink);
   font: inherit;
-  font-size: 0.82rem;
-  padding: 0.32rem 0.7rem;
-  border-radius: 999px;
+  font-size: var(--bl-text-sm);
+  font-weight: 700;
+  padding: 0.4rem 0.95rem;
   cursor: pointer;
+  box-shadow: 2px 3px 0 rgb(42 37 32 / 0.1);
 }
 
 .bahari-chip--on {
-  background: var(--sea);
-  border-color: var(--sea);
-  color: #f4efe6;
+  background: var(--bl-sea);
+  color: #fff;
 }
 
 .bahari-page {
   margin: 0 auto;
-  padding: 1.25rem 1rem 4.5rem;
-  max-width: 42rem;
+  padding: 0 0 calc(var(--bl-space-16) + env(safe-area-inset-bottom));
+  max-width: var(--bl-page-max);
 }
 
 .bahari-page--wide {
-  max-width: 72rem;
+  max-width: var(--bl-page-wide);
 }
 
-.bahari-page h1 {
-  margin: 0.2rem 0 0.5rem;
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
-  letter-spacing: -0.03em;
+.bahari-page h1,
+.bl-page-title {
+  margin: var(--bl-space-3) 0 var(--bl-space-4);
+  font-family: var(--bl-font-display);
+  font-weight: 700;
+  font-size: var(--bl-text-3xl);
+  line-height: var(--bl-leading-tight);
 }

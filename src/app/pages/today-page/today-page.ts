@@ -1,28 +1,53 @@
-import { Component, computed, inject, linkedSignal, resource } from '@angular/core';
+import { Component, computed, inject, linkedSignal, resource, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AiEdition } from '../../core/ai-edition';
 import { CoastBoard } from '../../core/coast-board';
 import { CoastState } from '../../core/coast-state';
-import { SiteBoardRow } from '../../core/models';
+import { ActivityHint, SiteBoardRow } from '../../core/models';
 import { ComicEdition } from '../../core/sea-story-brief';
 import { greetingForNow, whaleSeasonNow, wildlifeLine } from '../../core/plain-speak';
+import {
+  BlBadge,
+  BlButton,
+  BlCard,
+  BlKicker,
+  BlMoodPill,
+} from '../../design-system';
 import { EditionStrip } from '../../shared/edition-strip/edition-strip';
-import { RegionFilter } from '../../shared/region-filter/region-filter';
+import { SketchArt } from '../../shared/sketch-art/sketch-art';
+import { StretchDock } from '../../shared/stretch-dock/stretch-dock';
+
+type TodayView = 'brief' | 'edition';
 
 @Component({
-  imports: [RegionFilter, RouterLink, EditionStrip],
+  imports: [
+    StretchDock,
+    RouterLink,
+    EditionStrip,
+    SketchArt,
+    BlKicker,
+    BlMoodPill,
+    BlCard,
+    BlButton,
+    BlBadge,
+  ],
   selector: 'bahari-today-page',
   styleUrl: './today-page.css',
   templateUrl: './today-page.html',
 })
 export class TodayPage {
+  protected readonly view = signal<TodayView>('brief');
   protected readonly board = inject(CoastBoard);
   private readonly state = inject(CoastState);
   private readonly router = inject(Router);
   private readonly ai = inject(AiEdition);
 
   protected readonly greeting = greetingForNow();
-  protected readonly featured = linkedSignal(() => this.board.todaysPick());
+  /** Resets to today's pick when the region changes; user can override via also-today / somewhere else */
+  protected readonly featured = linkedSignal({
+    source: () => this.state.region().id,
+    computation: () => this.board.todaysPick(),
+  });
   protected readonly editionResource = resource({
     params: () => {
       if (!this.ai.configured()) {
@@ -33,20 +58,28 @@ export class TodayPage {
     },
     loader: ({ params, abortSignal }) => this.ai.fetchEdition(params.placeId, abortSignal),
   });
-  protected readonly panels = computed(() => {
-    const generated = this.generatedEdition();
-    if (generated?.panels.length) {
-      return generated.panels;
+  protected readonly featuredStory = computed(() => {
+    const row = this.featured();
+    if (!row?.story) {
+      return null;
     }
-    const story = this.featured()?.story;
+    const fresh = this.generatedEdition()?.story;
+    return fresh ? { ...row.story, ...fresh } : row.story;
+  });
+  protected readonly panels = computed(() => {
+    const story = this.featuredStory();
     if (!story) {
       return [];
     }
-    return [
-      { caption: story.waves },
-      { caption: story.wind },
-      { caption: story.blurb },
-    ];
+    const fallback = this.fallbackPanels(story);
+    const generated = this.generatedEdition();
+    if (!generated?.panels.length) {
+      return fallback;
+    }
+    if (generated.panels.length >= 6) {
+      return generated.panels.slice(0, 6);
+    }
+    return fallback.map((panel, index) => generated.panels[index] ?? panel);
   });
   protected readonly editionTitle = computed(() => this.generatedEdition()?.editionTitle ?? null);
   protected readonly editionFooter = computed(
@@ -104,5 +137,33 @@ export class TodayPage {
 
   openCard(row: SiteBoardRow): void {
     this.featured.set(row);
+  }
+
+  setView(next: TodayView): void {
+    this.view.set(next);
+  }
+
+  private fallbackPanels(story: NonNullable<SiteBoardRow['story']>) {
+    return [
+      { caption: story.waves },
+      { caption: story.wind },
+      { caption: story.water },
+      { caption: story.swahili },
+      { caption: story.blurb },
+      { caption: this.activityCaption(story.activities) },
+    ];
+  }
+
+  private activityCaption(activities: ActivityHint[]): string {
+    const yes = activities.filter((act) => act.ok).map((act) => act.label);
+    const skip = activities.filter((act) => !act.ok).map((act) => act.label);
+    const parts: string[] = [];
+    if (yes.length) {
+      parts.push(`Yes: ${yes.join(', ')}`);
+    }
+    if (skip.length) {
+      parts.push(`Skip: ${skip.join(', ')}`);
+    }
+    return parts.join(' · ') || 'Stay flexible today.';
   }
 }

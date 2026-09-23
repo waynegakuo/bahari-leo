@@ -2,45 +2,98 @@
   display: block;
 }
 
-h2 {
-  margin: 1.6rem 0 0.6rem;
-  font-size: 1.05rem;
+.about-page {
+  max-width: var(--bl-page-max);
+  margin: 0 auto;
+  padding: var(--bl-space-8) var(--bl-space-5) var(--bl-space-16);
 }
 
-header p:last-child,
-section p {
-  color: var(--ink-soft);
-  line-height: 1.55;
+.about-hero {
+  margin-bottom: var(--bl-space-10);
+  padding: var(--bl-space-5);
+  border: var(--bl-sketch-border);
+  border-radius: var(--bl-sketch-radius-lg);
+  background: var(--bl-surface);
+  box-shadow: var(--bl-sketch-shadow);
+  transform: rotate(0.35deg);
+}
+
+.about-hero h1 {
+  margin: var(--bl-space-2) 0 var(--bl-space-4);
+  font-size: var(--bl-text-3xl);
+}
+
+.about-hero__sub {
   margin: 0;
+  color: var(--bl-ink-soft);
+  line-height: var(--bl-leading-relaxed);
 }
 
-dl {
+.about-grid {
   display: grid;
-  gap: 0.85rem;
-  margin: 0;
+  gap: var(--bl-space-5);
 }
 
-dt {
-  font-weight: 600;
+@media (min-width: 640px) {
+  .about-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-wide {
+    grid-column: 1 / -1;
+  }
 }
 
-dd {
-  margin: 0.15rem 0 0;
-  color: var(--ink-soft);
-  line-height: 1.45;
+.card-title {
+  margin: var(--bl-space-2) 0 0;
+  font-size: var(--bl-text-2xl);
 }
 
-.more {
-  margin-top: 1.6rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--line);
+.card-body {
+  margin: var(--bl-space-3) 0 0;
+  color: var(--bl-ink-soft);
+  line-height: var(--bl-leading-relaxed);
+}
+
+.source-list {
+  display: grid;
+  gap: var(--bl-space-5);
+  margin: var(--bl-space-4) 0 0;
+}
+
+.source-list dt {
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-xl);
+  font-weight: 700;
+}
+
+.source-list dd {
+  margin: var(--bl-space-2) 0 0;
+  color: var(--bl-ink-soft);
+  font-size: var(--bl-text-sm);
 }
 
 .more summary {
   cursor: pointer;
-  font-weight: 600;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-xl);
+  font-weight: 700;
+  color: var(--bl-sea);
+  list-style: none;
+}
+
+.more summary::-webkit-details-marker {
+  display: none;
 }
 
 .more p {
-  margin: 0.55rem 0 0;
+  margin: var(--bl-space-4) 0 0;
+  color: var(--bl-ink-soft);
+  line-height: var(--bl-leading-relaxed);
+}
+
+@media (min-width: 768px) {
+  .about-page {
+    padding: var(--bl-space-10) var(--bl-space-8) var(--bl-space-16);
+  }
 }

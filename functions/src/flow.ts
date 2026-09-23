@@ -1,4 +1,5 @@
 import { generatePanelArt } from './agents/panel-art-agent';
+import { generateSeaStoryCopy } from './agents/sea-copy-agent';
 import { generateStoryEdition } from './agents/story-agent';
 import {
   editionHasAllImages,
@@ -26,23 +27,24 @@ async function attachPanelArt(
 }
 
 export async function generateCoastalEdition({ placeId }: { placeId: string }): Promise<ComicEdition> {
-  const cached = await readCachedEdition(placeId);
-  if (cached && editionHasAllImages(cached)) {
-    return cached;
-  }
-
   const brief = await buildBriefForPlace(placeId);
+  const storyCopy = await generateSeaStoryCopy(brief);
+  const cached = await readCachedEdition(placeId);
+
+  if (cached && editionHasAllImages(cached)) {
+    return { ...cached, story: storyCopy };
+  }
 
   if (cached) {
     const panels = await attachPanelArt(cached.panels, brief);
-    const edition: ComicEdition = { ...cached, panels };
+    const edition: ComicEdition = { ...cached, panels, story: storyCopy };
     await writePanelImages(placeId, panels);
     return edition;
   }
 
   const story = await generateStoryEdition(brief);
   const panels = await attachPanelArt(story.panels, brief);
-  const edition: ComicEdition = { ...story, panels };
+  const edition: ComicEdition = { ...story, panels, story: storyCopy };
   await writeCachedEdition(placeId, edition);
   return edition;
 }

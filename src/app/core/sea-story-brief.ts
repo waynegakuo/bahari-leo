@@ -1,5 +1,6 @@
 import { greetingForNow, whaleSeasonNow } from './plain-speak';
 import { CoastRegion, SeaStory, SiteBoardRow } from './models';
+import { SeaStoryCopy } from './story-copy';
 
 /** Input for the Genkit Cloud Function — derived from live data, never invented by the model. */
 export interface SeaStoryBrief {
@@ -16,6 +17,11 @@ export interface SeaStoryBrief {
     watch?: 'dolphins';
   };
   story: Pick<SeaStory, 'mood' | 'headline' | 'swahili' | 'blurb' | 'waves' | 'wind' | 'water'>;
+  measurements: {
+    waveHeightM: number | null;
+    windKmh: number | null;
+    sstC: number | null;
+  };
   activities: SeaStory['activities'];
   wildlife: {
     whaleSeason: boolean;
@@ -31,6 +37,7 @@ export interface ComicEdition {
   editionTitle: string;
   panels: Array<{ caption: string; imagePrompt?: string; imageUrl?: string }>; // imageUrl = base64 data URL
   footer: string;
+  story?: SeaStoryCopy & { mood?: SeaStory['mood'] };
 }
 
 const APPROVED_SWAHILI = [
@@ -67,6 +74,11 @@ export function buildSeaStoryBrief(row: SiteBoardRow, region: CoastRegion): SeaS
       waves: row.story.waves,
       wind: row.story.wind,
       water: row.story.water,
+    },
+    measurements: {
+      waveHeightM: row.marine?.waveHeightM ?? null,
+      windKmh: row.marine?.windKmh ?? null,
+      sstC: row.marine?.sstC ?? null,
     },
     activities: row.story.activities,
     wildlife: {

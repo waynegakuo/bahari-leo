@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoastBoard } from '../../core/coast-board';
 import { CoastState } from '../../core/coast-state';
+import { BlCard, BlKicker, BlMoodPill } from '../../design-system';
 import { RegionFilter } from '../../shared/region-filter/region-filter';
 
 @Component({
-  imports: [RegionFilter],
+  imports: [RegionFilter, BlCard, BlKicker, BlMoodPill],
   selector: 'bahari-landings-page',
   styleUrl: './landings-page.css',
   templateUrl: './landings-page.html',

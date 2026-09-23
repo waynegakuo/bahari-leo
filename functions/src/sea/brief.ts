@@ -5,7 +5,14 @@ import { greetingForNow, tellSeaStory, whaleSeasonNow } from './plain-speak';
 import { REGION_LABEL, siteById } from './sites';
 import { SeaStoryBrief } from './types';
 
-const APPROVED_SWAHILI = ['Bahari ni shwari', 'Bahari inachachamaa', 'Kaa pwani leo'] as const;
+/** Examples only — the sea-copy agent should prefer fresh phrases. */
+const APPROVED_SWAHILI = [
+  'Bahari ni shwari',
+  'Bahari inachachamaa',
+  'Kaa pwani leo',
+  'Mawimbi ni laini',
+  'Upepo mzuri leo',
+] as const;
 const DOLPHIN_SITES = ['Shimoni', 'Watamu'];
 
 export async function buildBriefForPlace(placeId: string): Promise<SeaStoryBrief> {
@@ -38,6 +45,11 @@ export async function buildBriefForPlace(placeId: string): Promise<SeaStoryBrief
       waves: story.waves,
       wind: story.wind,
       water: story.water,
+    },
+    measurements: {
+      waveHeightM: marine.waveHeightM,
+      windKmh: marine.windKmh,
+      sstC: marine.sstC,
     },
     activities: story.activities,
     wildlife: {

@@ -41,110 +41,114 @@
 
 .legend-card,
 .card {
-  background: color-mix(in srgb, var(--paper) 92%, transparent);
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 30px rgb(20 40 44 / 0.12);
-  backdrop-filter: blur(8px);
+  background: var(--bl-surface);
+  border: var(--bl-sketch-border);
+  border-radius: var(--bl-sketch-radius);
+  box-shadow: var(--bl-sketch-shadow);
 }
 
 .legend-card {
   position: absolute;
-  top: 0.85rem;
-  left: 0.85rem;
-  right: 0.85rem;
-  padding: 0.7rem 0.85rem 0.6rem;
-  max-width: 28rem;
+  top: var(--bl-space-4);
+  left: var(--bl-space-4);
+  right: var(--bl-space-4);
+  padding: var(--bl-space-5);
+  max-width: 26rem;
+  transform: rotate(-0.4deg);
 }
 
 .banner {
   margin: 0;
-  font-size: 0.86rem;
-  line-height: 1.4;
+  font-size: var(--bl-text-base);
+  line-height: var(--bl-leading-normal);
+}
+
+.banner strong {
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-lg);
+  color: var(--bl-sea);
 }
 
 .key {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem 0.85rem;
-  margin: 0.55rem 0 0;
+  gap: var(--bl-space-3);
+  margin: var(--bl-space-4) 0 0;
 }
 
 .key div {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--bl-space-2);
 }
 
 .key dt,
 .key dd {
   margin: 0;
-  font-size: 0.75rem;
-  color: var(--ink-soft);
+  font-size: var(--bl-text-sm);
+  color: var(--bl-ink-soft);
 }
 
 .swatch {
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 99px;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 40% 60% 55% 45% / 45% 40% 60% 55%;
+  border: 2px solid var(--bl-ink);
 }
 
-.swatch--good { background: var(--ok); }
-.swatch--mixed { background: var(--sand); }
-.swatch--poor { background: var(--coral); }
+.swatch--good { background: var(--bl-kind); }
+.swatch--mixed { background: var(--bl-restless); }
+.swatch--poor { background: var(--bl-rough); }
 .swatch--park {
   background: transparent;
-  border: 1.5px dashed var(--coral);
+  border-style: dashed;
 }
 
 .count {
-  margin: 0.45rem 0 0;
-  font-size: 0.8rem;
-  color: var(--ink-soft);
+  margin: var(--bl-space-4) 0 0;
+  font-size: var(--bl-text-sm);
+  color: var(--bl-ink-soft);
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.35rem 0.65rem;
+  gap: var(--bl-space-2) var(--bl-space-4);
 }
 
 .layers-btn {
   position: absolute;
-  top: auto;
-  bottom: 5.2rem;
-  left: 0.85rem;
-  border: 1px solid var(--line);
-  background: var(--paper);
-  font: inherit;
-  padding: 0.55rem 0.8rem;
+  bottom: 5rem;
+  left: var(--bl-space-4);
+  border: var(--bl-sketch-border);
+  border-radius: var(--bl-radius-pill);
+  background: var(--bl-coral);
+  color: #fff;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-lg);
+  font-weight: 700;
+  padding: var(--bl-space-3) var(--bl-space-5);
   cursor: pointer;
-}
-
-.dock-wrap .scrim {
-  display: none;
-}
-
-.dock-head {
-  display: none;
+  box-shadow: var(--bl-sketch-shadow);
 }
 
 .card--dock {
   position: absolute;
-  top: 7.6rem;
-  left: 0.85rem;
-  width: min(20.5rem, calc(100vw - 1.7rem));
+  top: 7.5rem;
+  left: var(--bl-space-4);
+  width: min(20rem, calc(100vw - 2rem));
   max-height: calc(100% - 9rem);
   overflow: auto;
-  padding: 0.9rem;
+  padding: var(--bl-space-5);
 }
 
 .card--inspect {
   position: absolute;
-  right: 0.85rem;
-  top: 0.85rem;
-  width: min(22rem, calc(100vw - 1.7rem));
+  right: var(--bl-space-4);
+  top: var(--bl-space-4);
+  width: min(21rem, calc(100vw - 2rem));
   max-height: calc(100% - 2rem);
   overflow: auto;
-  padding: 0.95rem 1rem;
+  padding: var(--bl-space-5);
   display: none;
+  transform: rotate(0.3deg);
 }
 
 .card--inspect-open {
@@ -153,33 +157,36 @@
 
 .hint {
   position: absolute;
-  left: 0.85rem;
-  bottom: 0.7rem;
+  left: var(--bl-space-4);
+  bottom: var(--bl-space-4);
   margin: 0;
-  font-size: 0.75rem;
-  color: var(--ink-soft);
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
-  padding: 0.25rem 0.45rem;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-base);
   z-index: 800;
 }
 
 .hint a {
-  color: var(--sea);
+  color: var(--bl-sea);
+  text-decoration: underline;
+  text-decoration-style: wavy;
 }
 
 .text-btn {
   border: 0;
   background: transparent;
-  font: inherit;
-  color: var(--sea);
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-lg);
+  color: var(--bl-coral);
   cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: wavy;
 }
 
+.dock-wrap .scrim { display: none; }
+.dock-head { display: none; }
+
 @media (max-width: 859px) {
-  .legend-card {
-    right: 0.85rem;
-    max-width: none;
-  }
+  .legend-card { right: var(--bl-space-4); max-width: none; }
 
   .card--dock {
     display: none;
@@ -188,29 +195,28 @@
     left: 0;
     right: 0;
     width: auto;
-    max-height: 72vh;
-    border-radius: 1rem 1rem 0 0;
+    max-height: 70vh;
+    border-radius: var(--bl-sketch-radius-lg) var(--bl-sketch-radius-lg) 0 0;
     z-index: 4;
   }
 
-  .dock-wrap--open .card--dock {
-    display: block;
-  }
+  .dock-wrap--open .card--dock { display: block; }
 
   .dock-wrap--open .scrim {
     display: block;
     position: absolute;
     inset: 0;
-    background: rgb(16 30 34 / 0.35);
+    background: rgb(42 37 32 / 0.2);
     z-index: 3;
   }
 
   .dock-head {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.6rem;
-    font-weight: 600;
+    margin-bottom: var(--bl-space-4);
+    font-family: var(--bl-font-display);
+    font-size: var(--bl-text-xl);
+    font-weight: 700;
   }
 
   .card--inspect {
@@ -219,38 +225,20 @@
     right: 0;
     left: 0;
     width: auto;
-    max-height: 58vh;
-    border-radius: 1rem 1rem 0 0;
+    max-height: 55vh;
+    border-radius: var(--bl-sketch-radius-lg) var(--bl-sketch-radius-lg) 0 0;
     z-index: 5;
   }
 
-  .card--inspect-open {
-    display: block;
-  }
-
-  .layers-btn {
-    display: inline-flex;
-  }
+  .card--inspect-open { display: block; }
+  .layers-btn { display: inline-flex; }
 }
 
 @media (min-width: 860px) {
-  .layers-btn,
-  .dock-head,
-  .dock-wrap .scrim {
-    display: none;
-  }
-
-  .card--inspect {
-    top: 0.85rem;
-  }
-
-  .card--inspect-open {
-    display: block;
-  }
-
+  .layers-btn, .dock-head, .dock-wrap .scrim { display: none; }
+  .card--inspect-open { display: block; }
   .legend-card {
-    top: 0.85rem;
-    left: calc(20.5rem + 1.7rem);
+    left: calc(20rem + 2rem);
     right: auto;
   }
 }

@@ -19,7 +19,8 @@ Before first deploy, finish in the [Firebase console](https://console.firebase.g
 
 1. **Firestore** — create a database (start in test mode or production rules; this repo ships `firestore.rules` that deny client access).
 2. **Blaze plan** — required for Cloud Functions and Secret Manager (`GEMINI_API_KEY`).
-3. **Gemini secret** — `firebase functions:secrets:set GEMINI_API_KEY`
+3. **Gemini secret** — `firebase functions:secrets:set GEMINI_API_KEY`  
+   Do **not** put `GEMINI_API_KEY` in `functions/.env` — Firebase loads `.env` as plain env vars on deploy and that clashes with the secret. For local emulator, use `functions/.secret.local` (see `.secret.local.example`).
 
 Genkit Monitoring is enabled in `functions/src/telemetry.ts`. After deploy, open **Firebase console → Build → Genkit** to see traces, latency, and token usage.
 

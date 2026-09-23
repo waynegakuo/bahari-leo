@@ -1,9 +1,9 @@
 @if (panels().length) {
-  <section class="comic" aria-label="Today’s comic edition">
+  <section class="comic" aria-label="Today's comic edition">
     <header class="masthead">
-      <p class="bahari-kicker">{{ generated() ? 'Today’s comic · Toleo la bahari' : 'Today’s edition' }}</p>
+      <bl-kicker>{{ generated() ? 'Today\'s comic · Toleo la bahari' : 'Today\'s edition' }}</bl-kicker>
       @if (title(); as line) {
-        <h2 class="title">{{ line }}</h2>
+        <h2 class="title bl-display">{{ line }}</h2>
       }
       @if (loading()) {
         <p class="status">The artist is inking the panels…</p>
@@ -13,8 +13,8 @@
     <div class="grid">
       @for (panel of panels(); track $index) {
         <figure class="panel">
-          <span class="panel-no">{{ $index + 1 }}</span>
-          <p class="kicker">{{ labelFor($index) }}</p>
+          <bahari-sketch-art kind="pin" size="sm" class="panel-pin" />
+          <p class="panel-kicker">{{ labelFor($index) }}</p>
           @if (panel.imageUrl) {
             <img class="art" [src]="panel.imageUrl" [alt]="labelFor($index) + ' — ' + panel.caption" loading="lazy" />
           } @else if (generated()) {

@@ -1,17 +1,22 @@
 :host {
   display: grid;
-  gap: 0.45rem;
+  gap: var(--bl-space-2);
 }
 
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: var(--bl-space-2);
+}
+
+.row--stack {
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 
 .summary {
-  margin: 0;
-  font-size: 0.82rem;
-  color: var(--ink-soft);
-  line-height: 1.4;
+  margin: var(--bl-space-3) 0 0;
+  font-size: var(--bl-text-base);
+  color: var(--bl-ink-soft);
+  line-height: var(--bl-leading-normal);
 }
