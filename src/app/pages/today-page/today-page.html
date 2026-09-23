@@ -27,6 +27,14 @@
         <button type="button" class="bahari-chip" (click)="another()">Somewhere else</button>
       </div>
     </article>
+
+    <bahari-edition-strip
+      [panels]="panels()"
+      [title]="editionTitle()"
+      [footer]="editionFooter()"
+      [loading]="editionResource.isLoading()"
+      [generated]="editionIsGenerated()"
+    />
   }
 
   <aside class="wildlife">
