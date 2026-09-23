@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+:host([data-gap='sm']) .stack { gap: var(--bl-space-8); }
+:host([data-gap='md']) .stack { gap: var(--bl-stack-gap); }
+:host([data-gap='lg']) .stack { gap: calc(var(--bl-stack-gap) + var(--bl-space-4)); }

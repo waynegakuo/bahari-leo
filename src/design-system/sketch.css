@@ -1,0 +1,20 @@
+/* Hand-drawn sketch utilities */
+
+.bl-sketch-box {
+  border: var(--bl-sketch-border);
+  border-radius: var(--bl-sketch-radius);
+  box-shadow: var(--bl-sketch-shadow);
+  background: var(--bl-surface);
+}
+
+.bl-sketch-underline {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8'%3E%3Cpath d='M0,4 Q30,1 60,5 T120,3' fill='none' stroke='%232a7a7a' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 6px;
+  padding-bottom: 0.35rem;
+}
+
+.bl-wobble-1 { transform: rotate(-0.6deg); }
+.bl-wobble-2 { transform: rotate(0.5deg); }
+.bl-wobble-3 { transform: rotate(-0.3deg); }

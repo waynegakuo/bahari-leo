@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.kicker {
+  margin: 0;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-xl);
+  font-weight: 600;
+  color: var(--bl-ink-muted);
+}
+
+:host-context(.sketch-masthead) .kicker {
+  color: rgb(255 255 255 / 0.85);
+  font-size: var(--bl-text-xl);
+}

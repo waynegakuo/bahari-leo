@@ -1,0 +1,30 @@
+:host {
+  display: inline-block;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-base);
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--bl-sketch-radius-sm);
+  border: 2px solid var(--bl-ink);
+  transform: rotate(-0.5deg);
+}
+
+.badge[data-tone='ok'] {
+  background: var(--bl-kind-soft);
+  color: var(--bl-kind);
+}
+
+.badge[data-tone='neutral'] {
+  background: var(--bl-paper-2);
+  color: var(--bl-ink-soft);
+}
+
+.badge[data-tone='warn'] {
+  background: var(--bl-rough-soft);
+  color: var(--bl-rough);
+}

@@ -1,0 +1,66 @@
+:host {
+  display: inline-block;
+}
+
+.chip {
+  font: inherit;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-base);
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--bl-radius-pill);
+  border: 2.5px solid rgb(255 255 255 / 0.6);
+  background: rgb(255 255 255 / 0.15);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 2px 3px 0 rgb(0 0 0 / 0.15);
+  transition: transform var(--bl-duration) var(--bl-ease);
+}
+
+.chip:hover:not(:disabled) {
+  transform: rotate(-1deg) scale(1.03);
+}
+
+.chip--on {
+  background: var(--bl-surface-note);
+  border-color: var(--bl-ink);
+  color: var(--bl-ink);
+  transform: rotate(0.5deg);
+}
+
+.chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+:host-context(.chip-light) .chip,
+:host-context(.sketch-filter-bar__tray) .chip {
+  border: var(--bl-sketch-border);
+  background: var(--bl-surface);
+  color: var(--bl-ink);
+  box-shadow: 2px 3px 0 rgb(42 37 32 / 0.1);
+}
+
+:host-context(.chip-light) .chip--on,
+:host-context(.sketch-filter-bar__tray) .chip--on {
+  background: var(--bl-sea);
+  border-color: var(--bl-ink);
+  color: #fff;
+}
+
+:host-context(.chip-light) .chip:hover:not(:disabled),
+:host-context(.sketch-filter-bar__tray) .chip:hover:not(:disabled) {
+  transform: rotate(-0.8deg);
+  background: var(--bl-surface-note);
+}
+
+:host-context(.row--stack) {
+  display: block;
+  width: 100%;
+}
+
+:host-context(.row--stack) .chip {
+  display: block;
+  width: 100%;
+  text-align: left;
+}

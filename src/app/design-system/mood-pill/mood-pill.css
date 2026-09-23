@@ -1,0 +1,41 @@
+:host {
+  display: inline-block;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-lg);
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border: var(--bl-sketch-border);
+  border-radius: var(--bl-radius-pill);
+  background: var(--bl-surface);
+  box-shadow: 2px 3px 0 rgb(42 37 32 / 0.1);
+  transform: rotate(-0.8deg);
+}
+
+.pill::before {
+  content: '●';
+  font-size: 0.85rem;
+}
+
+:host([data-mood='kind']) .pill {
+  background: var(--bl-kind-soft);
+  color: var(--bl-kind);
+  border-color: var(--bl-kind);
+}
+
+:host([data-mood='restless']) .pill {
+  background: var(--bl-restless-soft);
+  color: var(--bl-restless);
+  border-color: var(--bl-restless);
+}
+
+:host([data-mood='rough']) .pill {
+  background: var(--bl-rough-soft);
+  color: var(--bl-rough);
+  border-color: var(--bl-rough);
+}

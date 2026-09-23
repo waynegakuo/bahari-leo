@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+:host([data-size='sm']) svg {
+  width: 2.5rem;
+}
+
+:host.atf-tab__art svg {
+  width: 100%;
+}
+
+:host.panel-pin svg {
+  width: 100%;
+}
+
+:host([data-size='md']) svg {
+  width: 4rem;
+}
+
+:host([data-size='lg']) svg {
+  width: 6.5rem;
+}
+
+:host([data-kind='coast'][data-size='lg']) svg {
+  width: 7.5rem;
+}

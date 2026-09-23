@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.page {
+  margin: 0 auto;
+  padding: var(--bl-space-8) var(--bl-space-5) calc(var(--bl-space-16) + env(safe-area-inset-bottom));
+  max-width: var(--bl-page-max);
+}
+
+.page--wide {
+  max-width: var(--bl-page-wide);
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding: var(--bl-space-10) var(--bl-space-8) var(--bl-space-16);
+  }
+}

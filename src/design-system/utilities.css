@@ -1,0 +1,27 @@
+.bl-display {
+  font-family: var(--bl-font-display);
+  font-weight: 700;
+  line-height: var(--bl-leading-tight);
+}
+
+.bl-status {
+  margin: 0;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-xl);
+  color: var(--bl-ink-muted);
+}
+
+.bl-status--bad {
+  color: var(--bl-rough);
+}
+
+.bl-mood-kind { color: var(--bl-kind); }
+.bl-mood-rough { color: var(--bl-rough); }
+
+.bl-link {
+  color: var(--bl-sea);
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 3px;
+  font-weight: 700;
+}

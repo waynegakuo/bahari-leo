@@ -1,0 +1,47 @@
+<div class="dock" [class.dock--open]="open()" [class.dock--settled]="settled()">
+  <button
+    type="button"
+    class="dock__tab bl-wobble-1"
+    [attr.aria-expanded]="open()"
+    aria-controls="stretch-panel"
+    (click)="toggle()"
+  >
+    <bahari-sketch-art kind="waves" size="sm" class="dock__tab-art" />
+    <span class="dock__tab-label">{{ state.region().label }}</span>
+    <span class="dock__tab-hint">Change stretch</span>
+  </button>
+
+  @if (open()) {
+    <button
+      type="button"
+      class="dock__backdrop"
+      aria-label="Close stretch menu"
+      (click)="close()"
+    ></button>
+  }
+
+  <aside
+    id="stretch-panel"
+    class="dock__panel bl-wobble-2"
+    [class.dock__panel--open]="open()"
+    [attr.aria-hidden]="!open()"
+  >
+    <header class="dock__head">
+      <div class="dock__head-text">
+        @if (greeting()) {
+          <bl-kicker>{{ greeting() }}</bl-kicker>
+        }
+        <h2 class="dock__title bl-display">{{ title() }}</h2>
+        <p class="dock__swahili">{{ state.region().swahili }}</p>
+      </div>
+      <bahari-sketch-art kind="coast" size="md" class="dock__head-art" />
+    </header>
+
+    <bahari-region-filter
+      class="dock__filter chip-light"
+      layout="stack"
+      [showSummary]="true"
+      (regionSelected)="onRegionSelected()"
+    />
+  </aside>
+</div>

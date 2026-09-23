@@ -1,0 +1,117 @@
+/* Bahari Leo — Hand-Drawn Sketch tokens */
+
+:root {
+  /* ── Sketch palette ── */
+  --bl-ink: #2a2520;
+  --bl-ink-soft: #5c534a;
+  --bl-ink-muted: #8a8076;
+
+  --bl-paper: #fef6e8;
+  --bl-paper-2: #f5eacf;
+  --bl-surface: #fffdf7;
+  --bl-surface-warm: #fff9e8;
+  --bl-surface-note: #fff8dc;
+
+  --bl-sea: #2a7a7a;
+  --bl-sea-light: #3d9999;
+  --bl-tide: #1f5f5f;
+  --bl-tide-mid: #2a7575;
+  --bl-tide-light: #3a9090;
+  --bl-foam: #d4ede8;
+  --bl-ink-on-tide: #f5faf9;
+
+  --bl-coral: #d4623a;
+  --bl-coral-deep: #b84e2a;
+  --bl-marker-red: #e05545;
+  --bl-marker-blue: #3a7bd5;
+  --bl-marker-green: #4a9a6a;
+  --bl-marker-yellow: #f0c040;
+
+  --bl-kind: #4a9a6a;
+  --bl-kind-soft: #e2f0e6;
+  --bl-restless: #c49030;
+  --bl-restless-soft: #f5ecd4;
+  --bl-rough: #d4623a;
+  --bl-rough-soft: #fce8df;
+
+  --bl-line: #2a2520;
+  --bl-line-soft: #8a8076;
+
+  /* ── Sketch shape ── */
+  --bl-sketch-radius: 255px 12px 225px 18px / 18px 225px 12px 255px;
+  --bl-sketch-radius-sm: 180px 8px 160px 10px / 10px 160px 8px 180px;
+  --bl-sketch-radius-lg: 320px 20px 280px 24px / 24px 280px 20px 320px;
+  --bl-sketch-border: 2.5px solid var(--bl-ink);
+  --bl-sketch-shadow: 4px 5px 0 rgb(42 37 32 / 0.12);
+  --bl-sketch-shadow-hover: 6px 7px 0 rgb(42 37 32 / 0.15);
+
+  /* ── Typography (hand-drawn) ── */
+  --bl-font-display: 'Caveat', 'Segoe Print', cursive;
+  --bl-font-sans: 'Kalam', 'Comic Sans MS', cursive;
+  --bl-font-mono: 'Kalam', cursive;
+
+  --bl-text-xs: 0.8rem;
+  --bl-text-sm: 0.95rem;
+  --bl-text-base: 1.1rem;
+  --bl-text-lg: 1.3rem;
+  --bl-text-xl: 1.55rem;
+  --bl-text-2xl: clamp(1.85rem, 4vw, 2.5rem);
+  --bl-text-3xl: clamp(2.25rem, 5vw, 3.25rem);
+  --bl-text-4xl: clamp(2.75rem, 6.5vw, 4rem);
+
+  --bl-leading-tight: 1.15;
+  --bl-leading-normal: 1.55;
+  --bl-leading-relaxed: 1.65;
+
+  --bl-tracking-kicker: 0.08em;
+  --bl-tracking-tight: 0;
+
+  /* ── Spacing ── */
+  --bl-space-1: 0.25rem;
+  --bl-space-2: 0.5rem;
+  --bl-space-3: 0.75rem;
+  --bl-space-4: 1rem;
+  --bl-space-5: 1.25rem;
+  --bl-space-6: 1.5rem;
+  --bl-space-8: 2rem;
+  --bl-space-10: 2.5rem;
+  --bl-space-12: 3rem;
+  --bl-space-16: 4rem;
+
+  --bl-radius-sm: var(--bl-sketch-radius-sm);
+  --bl-radius-md: var(--bl-sketch-radius);
+  --bl-radius-lg: var(--bl-sketch-radius-lg);
+  --bl-radius-xl: var(--bl-sketch-radius-lg);
+  --bl-radius-pill: 255px 20px 255px 20px / 20px 255px 20px 255px;
+
+  --bl-shadow-card: var(--bl-sketch-shadow);
+  --bl-shadow-lift: var(--bl-sketch-shadow-hover);
+
+  --bl-stack-gap: 2rem;
+  --bl-page-max: 42rem;
+  --bl-page-wide: 70rem;
+
+  --bl-ease: cubic-bezier(0.34, 1.2, 0.64, 1);
+  --bl-duration: 180ms;
+
+  /* Legacy */
+  --ink: var(--bl-ink);
+  --ink-soft: var(--bl-ink-soft);
+  --paper: var(--bl-paper);
+  --paper-2: var(--bl-paper-2);
+  --sea: var(--bl-sea);
+  --sea-deep: var(--bl-tide);
+  --foam: var(--bl-foam);
+  --sand: var(--bl-paper-2);
+  --coral: var(--bl-coral);
+  --ok: var(--bl-kind);
+  --line: var(--bl-line);
+  --font-sans: var(--bl-font-sans);
+  --font-mono: var(--bl-font-mono);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --bl-stack-gap: 2.5rem;
+  }
+}

@@ -1,0 +1,259 @@
+:host {
+  display: contents;
+}
+
+.dock {
+  --dock-tab-width: 2.75rem;
+  pointer-events: none;
+}
+
+.dock__tab,
+.dock__panel,
+.dock__backdrop {
+  pointer-events: auto;
+}
+
+/* Floating tab on the left edge */
+.dock__tab {
+  position: fixed;
+  left: 0;
+  top: calc(50% + 1.5rem);
+  z-index: 35;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--bl-space-1);
+  width: var(--dock-tab-width);
+  padding: var(--bl-space-3) var(--bl-space-2);
+  border: var(--bl-sketch-border);
+  border-left: 0;
+  border-radius: 0 var(--bl-sketch-radius) var(--bl-sketch-radius) 0;
+  background: var(--bl-sea);
+  color: #fff;
+  box-shadow: var(--bl-sketch-shadow);
+  cursor: pointer;
+  font: inherit;
+  text-align: center;
+  transition: transform var(--bl-duration) var(--bl-ease), box-shadow var(--bl-duration) var(--bl-ease);
+}
+
+/* Gentle peek — nudges out from the edge every few seconds */
+.dock:not(.dock--open):not(.dock--settled) .dock__tab {
+  animation: dock-tab-nudge 4.5s ease-in-out 1.5s infinite;
+}
+
+.dock__tab:hover,
+.dock--open .dock__tab {
+  animation: none;
+}
+
+.dock__tab:hover {
+  transform: translateY(-50%) translateX(2px);
+  box-shadow: 4px 5px 0 rgb(42 37 32 / 0.18);
+}
+
+.dock--open .dock__tab {
+  transform: translateY(-50%) translateX(calc(min(18rem, 85vw) - 2px));
+  border-radius: 0 var(--bl-sketch-radius) 0 0;
+  z-index: 37;
+}
+
+.dock__tab-art {
+  color: rgb(255 255 255 / 0.9);
+}
+
+.dock:not(.dock--open):not(.dock--settled) .dock__tab-art {
+  animation: dock-wave-wiggle 4.5s ease-in-out 1.5s infinite;
+}
+
+.dock__tab:hover .dock__tab-art,
+.dock--open .dock__tab-art {
+  animation: none;
+}
+
+.dock__tab-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-base);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.dock__tab-hint {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Slide-out panel */
+.dock__panel {
+  position: fixed;
+  left: 0;
+  top: calc(50% + 1.5rem);
+  z-index: 36;
+  width: min(18rem, calc(100vw - var(--dock-tab-width) - var(--bl-space-3)));
+  max-height: min(28rem, calc(100dvh - 8rem));
+  overflow: auto;
+  padding: var(--bl-space-4);
+  border: var(--bl-sketch-border);
+  border-left: 0;
+  border-radius: 0 var(--bl-sketch-radius-lg) var(--bl-sketch-radius-lg) 0;
+  background: var(--bl-paper);
+  box-shadow: var(--bl-sketch-shadow);
+  transform: translate(calc(-100% + var(--dock-tab-width)), -50%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform var(--bl-duration) var(--bl-ease),
+    opacity var(--bl-duration) var(--bl-ease),
+    visibility var(--bl-duration) var(--bl-ease);
+}
+
+.dock__panel--open {
+  transform: translate(0, -50%);
+  opacity: 1;
+  visibility: visible;
+}
+
+.dock__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--bl-space-3);
+  margin-bottom: var(--bl-space-4);
+  padding-bottom: var(--bl-space-3);
+  border-bottom: 2px dashed var(--bl-ink-soft);
+}
+
+.dock__head-text {
+  min-width: 0;
+}
+
+.dock__title {
+  margin: 0;
+  font-size: var(--bl-text-2xl);
+  line-height: 1.1;
+  color: var(--bl-ink);
+}
+
+.dock__swahili {
+  margin: var(--bl-space-1) 0 0;
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-lg);
+  color: var(--bl-ink-muted);
+}
+
+.dock__head-art {
+  flex-shrink: 0;
+  color: var(--bl-sea);
+  opacity: 0.85;
+}
+
+.dock__filter {
+  display: block;
+}
+
+.dock__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 34;
+  border: 0;
+  padding: 0;
+  background: rgb(42 37 32 / 0.25);
+  cursor: pointer;
+  animation: dock-fade-in var(--bl-duration) var(--bl-ease);
+}
+
+@keyframes dock-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dock-tab-nudge {
+  0%,
+  78%,
+  100% {
+    transform: translateY(-50%) translateX(0) rotate(0deg);
+    box-shadow: var(--bl-sketch-shadow);
+  }
+
+  6% {
+    transform: translateY(calc(-50% - 2px)) translateX(6px) rotate(0.5deg);
+    box-shadow: 5px 6px 0 rgb(42 37 32 / 0.2);
+  }
+
+  12% {
+    transform: translateY(calc(-50% + 1px)) translateX(3px) rotate(-0.35deg);
+  }
+
+  18% {
+    transform: translateY(calc(-50% - 1px)) translateX(5px) rotate(0.25deg);
+  }
+
+  24% {
+    transform: translateY(-50%) translateX(2px) rotate(0deg);
+  }
+
+  30% {
+    transform: translateY(-50%) translateX(0) rotate(0deg);
+    box-shadow: var(--bl-sketch-shadow);
+  }
+}
+
+@keyframes dock-wave-wiggle {
+  0%,
+  78%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+
+  8% {
+    transform: rotate(-8deg) translateY(-1px);
+  }
+
+  16% {
+    transform: rotate(6deg) translateY(0);
+  }
+
+  24% {
+    transform: rotate(-4deg) translateY(0);
+  }
+
+  30% {
+    transform: rotate(0deg) translateY(0);
+  }
+}
+
+@media (min-width: 860px) {
+  .dock__tab {
+    top: 50%;
+  }
+
+  .dock__panel {
+    top: 50%;
+    width: 19rem;
+    max-height: min(32rem, calc(100dvh - 6rem));
+  }
+
+  .dock--open .dock__tab {
+    transform: translateY(-50%) translateX(calc(19rem - 2px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock__tab,
+  .dock__panel,
+  .dock__tab-art {
+    animation: none !important;
+    transition: none;
+  }
+}
