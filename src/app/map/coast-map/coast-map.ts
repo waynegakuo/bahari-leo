@@ -180,7 +180,7 @@ export class CoastMap {
           fillOpacity: 0.12,
         },
       );
-      polygon.bindTooltip(park.name + ' — protected. Don’t fish here', { sticky: true });
+      polygon.bindTooltip(park.name + ' — protected reef', { sticky: true });
       polygon.addTo(this.parksLayer);
     }
     this.parksLayer.addTo(this.map);

@@ -8,14 +8,14 @@
           Today’s stretch: <strong>{{ pick.site.name }}</strong>.
           {{ pick.story?.headline ?? 'Tap a pin and we’ll tell you how the sea feels.' }}
         } @else {
-          Tap a pin. We’ll say how the sea feels — no jargon needed.
+          Tap a pin — we’ll tell you how the sea feels.
         }
       </p>
       <dl class="key">
         <div><dt class="swatch swatch--good"></dt><dd>Kind</dd></div>
         <div><dt class="swatch swatch--mixed"></dt><dd>A bit restless</dd></div>
         <div><dt class="swatch swatch--poor"></dt><dd>Stay on the sand</dd></div>
-        <div><dt class="swatch swatch--park"></dt><dd>Park — don’t fish</dd></div>
+        <div><dt class="swatch swatch--park"></dt><dd>Marine park</dd></div>
       </dl>
       <p class="count">
         @if (board.boardResource.isLoading()) {

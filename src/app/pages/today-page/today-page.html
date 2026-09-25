@@ -78,11 +78,11 @@
                     <p class="cover-sketch__wind">{{ story.wind }}</p>
                     <ul class="cover-sketch__acts">
                       @for (act of story.activities; track act.id) {
-                        <li>
-                          <bl-badge [tone]="act.ok ? 'ok' : 'neutral'">
-                            {{ act.ok ? 'Yes' : 'Skip' }} · {{ act.label }}
-                          </bl-badge>
-                        </li>
+                        @if (act.ok) {
+                          <li>
+                            <bl-badge tone="ok">{{ act.label }}</bl-badge>
+                          </li>
+                        }
                       }
                     </ul>
                   </div>

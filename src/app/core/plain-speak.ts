@@ -59,7 +59,7 @@ function blurbFor(mood: SeaMood, waves: string, water: string): string {
     return `${waves} ${water} A good stretch for a walk, a swim close to shore, or a slow boat.`;
   }
   if (mood === 'restless') {
-    return `${waves} Fine for the beach. If you go on the water, stay near land and don’t fight it.`;
+    return `${waves} Fine for the beach. Stay close to shore if you go out.`;
   }
   return `${waves} Leave the boats. Take chai, watch the dhows, come back when she’s quieter.`;
 }
@@ -72,7 +72,7 @@ function waveLine(metres: number | null): string {
     return 'Almost like a quiet creek — ankle-high.';
   }
   if (metres < 0.8) {
-    return 'Knee-high waves. Playful, not scary.';
+    return 'Knee-high waves. Playful and gentle.';
   }
   if (metres < 1.3) {
     return 'About waist-high. You’ll get splashed.';
@@ -80,7 +80,7 @@ function waveLine(metres: number | null): string {
   if (metres < 1.8) {
     return 'Chest-high. Boats will bounce.';
   }
-  return 'Too big for a small boat. Watch from the beach.';
+  return 'Big waves today — best watched from the beach.';
 }
 
 function windLine(kmh: number | null): string {
@@ -113,7 +113,7 @@ function waterLine(celsius: number | null): string {
     return 'The water is pleasantly warm.';
   }
   if (celsius >= 24) {
-    return 'The water is fresh, not cold.';
+    return 'The water is comfortably cool.';
   }
   return 'The water is cooler than most people like.';
 }
@@ -152,12 +152,12 @@ export function wildlifeLine(name: string, mood: SeaMood | undefined, whales: bo
     ? ' Humpback whales pass through from July to October.'
     : '';
   if (mood === 'kind') {
-    return `A kind day to look for dolphins from ${name}. They live here year-round. Go with a licensed boat, and don’t chase.${season}`;
+    return `A kind day to look for dolphins from ${name}. They live here year-round. Go with a licensed boat and give them space.${season}`;
   }
   if (mood === 'restless') {
-    return `${name} is dolphin country, but the water is restless. A slow licensed boat if you go — look, don’t chase.${season}`;
+    return `${name} is dolphin country. The water is restless — a slow licensed boat if you go, and watch from a respectful distance.${season}`;
   }
-  return `${name} is where people go looking for dolphins, but not by boat today.${season}`;
+  return `${name} is dolphin country. Better from the shore today — they live here year-round.${season}`;
 }
 
 export function whaleSeasonNow(): boolean {

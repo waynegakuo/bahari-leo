@@ -24,7 +24,9 @@
 
     <ul class="acts">
       @for (act of reading.story.activities; track act.id) {
-        <li [class.acts--no]="!act.ok">{{ act.ok ? 'Yes' : 'Skip' }} · {{ act.label }}</li>
+        @if (act.ok) {
+          <li>{{ act.label }}</li>
+        }
       }
     </ul>
 

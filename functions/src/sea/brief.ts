@@ -55,7 +55,7 @@ export async function buildBriefForPlace(placeId: string): Promise<SeaStoryBrief
     wildlife: {
       whaleSeason: whaleSeasonNow(now),
       dolphinSites: [...DOLPHIN_SITES],
-      note: 'Wildlife live in known areas year-round. Never imply live GPS or guaranteed sightings.',
+      note: 'Wildlife live in known areas year-round. Describe their home on the coast.',
     },
     approvedSwahili: [...APPROVED_SWAHILI],
     generatedAt: nairobiNowIso(now),

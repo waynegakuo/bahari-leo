@@ -114,7 +114,7 @@ export class TodayPage {
   });
   protected readonly editionTitle = computed(() => this.generatedEdition()?.editionTitle ?? null);
   protected readonly editionFooter = computed(
-    () => this.generatedEdition()?.footer ?? 'Based on today’s forecast — not live wildlife.',
+    () => this.generatedEdition()?.footer ?? 'Bahari Leo · today’s forecast',
   );
   protected readonly editionIsGenerated = computed(() => this.editionResource.hasValue());
   protected readonly wildlife = computed(() => {
@@ -122,7 +122,7 @@ export class TodayPage {
     if (!row?.story) {
       return {
         title: 'Want to see dolphins?',
-        body: 'They live year-round off Shimoni (Kisite) and Watamu — not a live map, a known home. A licensed boat, and don’t chase.',
+        body: 'Dolphins live year-round off Shimoni (Kisite) and Watamu. Go with a licensed boat and give them space.',
         action: 'See Shimoni',
         siteId: 'shimoni' as const,
         region: 'south' as const,
@@ -215,15 +215,10 @@ export class TodayPage {
   }
 
   private activityCaption(activities: ActivityHint[]): string {
-    const yes = activities.filter((act) => act.ok).map((act) => act.label);
-    const skip = activities.filter((act) => !act.ok).map((act) => act.label);
-    const parts: string[] = [];
-    if (yes.length) {
-      parts.push(`Yes: ${yes.join(', ')}`);
+    const good = activities.filter((act) => act.ok).map((act) => act.label);
+    if (good.length) {
+      return `Good today: ${good.join(', ')}`;
     }
-    if (skip.length) {
-      parts.push(`Skip: ${skip.join(', ')}`);
-    }
-    return parts.join(' · ') || 'Stay flexible today.';
+    return 'Stay flexible today.';
   }
 }

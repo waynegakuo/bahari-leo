@@ -60,7 +60,7 @@ function blurbFor(mood: SeaMood, waves: string, water: string): string {
     return `${waves} ${water} A good stretch for a walk, a swim close to shore, or a slow boat.`;
   }
   if (mood === 'restless') {
-    return `${waves} Fine for the beach. If you go on the water, stay near land and don’t fight it.`;
+    return `${waves} Fine for the beach. Stay close to shore if you go out.`;
   }
   return `${waves} Leave the boats. Take chai, watch the dhows, come back when she’s quieter.`;
 }
@@ -73,7 +73,7 @@ function waveLine(metres: number | null): string {
     return 'Almost like a quiet creek — ankle-high.';
   }
   if (metres < 0.8) {
-    return 'Knee-high waves. Playful, not scary.';
+    return 'Knee-high waves. Playful and gentle.';
   }
   if (metres < 1.3) {
     return 'About waist-high. You’ll get splashed.';
@@ -81,7 +81,7 @@ function waveLine(metres: number | null): string {
   if (metres < 1.8) {
     return 'Chest-high. Boats will bounce.';
   }
-  return 'Too big for a small boat. Watch from the beach.';
+  return 'Big waves today — best watched from the beach.';
 }
 
 function windLine(kmh: number | null): string {
@@ -114,7 +114,7 @@ function waterLine(celsius: number | null): string {
     return 'The water is pleasantly warm.';
   }
   if (celsius >= 24) {
-    return 'The water is fresh, not cold.';
+    return 'The water is comfortably cool.';
   }
   return 'The water is cooler than most people like.';
 }

@@ -16,7 +16,7 @@ export const ComicPanelSchema = z.object({
 export const ComicEditionSchema = z.object({
   editionTitle: z.string().describe('e.g. Bahari Leo · Vanga · 2026-09-22'),
   panels: z.array(ComicPanelSchema).length(6),
-  footer: z.string().describe('One-line reminder that this is a forecast, not live wildlife.'),
+  footer: z.string().describe('One-line edition attribution, e.g. "Bahari Leo · today’s forecast".'),
 });
 
 export type StoryEditionDraft = z.infer<typeof ComicEditionSchema>;

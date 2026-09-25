@@ -33,4 +33,4 @@ Rules:
 - Keep total caption text under 220 words across all panels.
 - Satellite layers are 1–2 days old — do not describe chlorophyll or SST as “right now”.
 
-Output JSON only. editionTitle like "Bahari Leo · Vanga · 2026-09-22". Footer: forecast reminder, not live wildlife.`;
+Output JSON only. editionTitle like "Bahari Leo · Vanga · 2026-09-22". Footer: short edition attribution tied to place and date.`;
