@@ -46,10 +46,16 @@ ng serve
 Open `http://localhost:4200/`. Today’s three-panel strip uses the ordinary sea story until the Functions emulator (or a deployed function) answers.
 
 ## AI editions locally
-
+For Windows:
 ```bash
 copy functions\.env.example functions\.env
 copy functions\.env.example functions\.secret.local
+```
+
+For MacOS:
+```bash
+cp functions\.env.example functions\.env
+cp functions\.env.example functions\.secret.local
 ```
 
 Put a [Gemini API key](https://aistudio.google.com/apikey) in both files, then:
