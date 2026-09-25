@@ -39,9 +39,8 @@ export const generateStoryCopies = onRequest(
       const stories = await generateStoryCopiesForPlaces(placeIds);
       res.json({ stories });
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Could not write fresh sea stories';
-      console.error('generateStoryCopies failed', err);
-      res.status(500).json({ error: message });
+      const { respondGeminiError } = await import('./http-errors');
+      respondGeminiError(res, err, 'Could not write fresh sea stories');
     }
   },
 );
@@ -94,9 +93,8 @@ export const generateCoverArt = onRequest(
       });
       res.json(result);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Could not paint today’s cover';
-      console.error('generateCoverArt failed', err);
-      res.status(500).json({ error: message });
+      const { respondGeminiError } = await import('./http-errors');
+      respondGeminiError(res, err, 'Could not paint today’s cover');
     }
   },
 );
@@ -136,9 +134,12 @@ export const generateEdition = onRequest(
       res.json(edition);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Could not write today’s edition';
-      const status = message.startsWith('Unknown place') ? 404 : 500;
-      console.error('generateEdition failed', err);
-      res.status(status).json({ error: message });
+      if (message.startsWith('Unknown place')) {
+        res.status(404).json({ error: message });
+        return;
+      }
+      const { respondGeminiError } = await import('./http-errors');
+      respondGeminiError(res, err, 'Could not write today’s edition');
     }
   },
 );

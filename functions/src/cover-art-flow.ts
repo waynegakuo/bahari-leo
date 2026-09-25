@@ -34,6 +34,7 @@ export async function generateCoverArtForPlace(input: CoverArtRequest): Promise<
     return { status: 'failed' };
   }
 
+
   await writeCachedCoverArt(input.placeId, imageUrl);
   return { imageUrl, status: 'ready' };
 }

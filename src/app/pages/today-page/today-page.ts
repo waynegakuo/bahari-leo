@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, effect, inject, linkedSignal, resource, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AiEdition } from '../../core/ai-edition';
+import { AiEdition, AiRateLimitError } from '../../core/ai-edition';
 import { CoastBoard } from '../../core/coast-board';
 import { CoastState } from '../../core/coast-state';
 import { ActivityHint, SeaStory, SiteBoardRow } from '../../core/models';
@@ -66,14 +66,13 @@ export class TodayPage {
         return;
       }
       const featured = this.featured();
-      if (featured?.story) {
-        this.requestCoverArt(featured, featured.story);
+      if (!featured?.story) {
+        return;
       }
-      for (const row of this.board.alsoToday()) {
-        if (row.story) {
-          this.requestCoverArt(row, row.story);
-        }
-      }
+      const timer = window.setTimeout(() => {
+        this.requestCoverArt(featured, featured.story!);
+      }, 2_000);
+      return () => window.clearTimeout(timer);
     });
   }
   protected readonly view = signal<TodayView>('brief');
@@ -130,7 +129,7 @@ export class TodayPage {
   });
   protected readonly editionResource = resource({
     params: () => {
-      if (!this.ai.configured()) {
+      if (!this.ai.configured() || this.view() !== 'edition') {
         return undefined;
       }
       const placeId = this.featured()?.site.id;
@@ -296,7 +295,22 @@ export class TodayPage {
             : { loading: false, failed: true },
         }));
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err instanceof AiRateLimitError) {
+          this.coverArtByPlace.update((slots) => ({
+            ...slots,
+            [placeId]: { loading: false },
+          }));
+          window.setTimeout(() => {
+            this.coverArtByPlace.update((slots) => {
+              const next = { ...slots };
+              delete next[placeId];
+              return next;
+            });
+            this.requestCoverArt(row, story);
+          }, err.retryAfterSec * 1_000);
+          return;
+        }
         this.coverArtByPlace.update((slots) => ({
           ...slots,
           [placeId]: { loading: false, failed: true },

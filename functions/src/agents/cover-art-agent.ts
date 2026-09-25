@@ -1,5 +1,7 @@
 import { googleAI } from '@genkit-ai/google-genai';
 import type { GenerateResponse } from 'genkit';
+import { runImageJob } from '../gemini-image-queue';
+import { isRateLimitError } from '../gemini-retry';
 import { PANEL_ART_MODEL } from './models';
 import { COVER_ART_AGENT_INSTRUCTION } from './prompts/cover-art-agent';
 import { getRuntime } from './runtime';
@@ -50,21 +52,26 @@ function buildCoverPrompt(input: CoverArtInput): string {
 /** Cover-art agent — one editorial illustration as a base64 data URL. */
 export async function generateCoverArt(input: CoverArtInput): Promise<string | undefined> {
   try {
-    const ai = await getRuntime();
-    const response = await ai.generate({
-      model: googleAI.model(PANEL_ART_MODEL),
-      system: COVER_ART_AGENT_INSTRUCTION,
-      prompt: buildCoverPrompt(input),
-      config: {
-        responseModalities: ['IMAGE'],
-        imageConfig: {
-          aspectRatio: COVER_ART_ASPECT_RATIO,
-          imageSize: '1K',
+    return await runImageJob('cover-art agent', async () => {
+      const ai = await getRuntime();
+      const response = await ai.generate({
+        model: googleAI.model(PANEL_ART_MODEL),
+        system: COVER_ART_AGENT_INSTRUCTION,
+        prompt: buildCoverPrompt(input),
+        config: {
+          responseModalities: ['IMAGE'],
+          imageConfig: {
+            aspectRatio: COVER_ART_ASPECT_RATIO,
+            imageSize: '1K',
+          },
         },
-      },
+      });
+      return extractMediaDataUrl(response);
     });
-    return extractMediaDataUrl(response);
   } catch (err) {
+    if (isRateLimitError(err)) {
+      throw err;
+    }
     console.warn('cover-art agent failed', err);
     return undefined;
   }

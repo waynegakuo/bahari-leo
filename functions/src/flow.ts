@@ -6,42 +6,60 @@ import {
   EDITION_PANEL_COUNT,
   readCachedEdition,
   writeCachedEdition,
+  writePanelImages,
 } from './cache';
+import { readCachedStoryCopy, writeCachedStoryCopy } from './story-copy-cache';
 import { buildBriefForPlace } from './sea/brief';
-import { ComicEdition, ComicPanel, SeaStoryBrief } from './sea/types';
+import { ComicEdition, ComicPanel, SeaStoryBrief, SeaStoryCopy } from './sea/types';
+
+async function resolveStoryCopy(brief: SeaStoryBrief): Promise<SeaStoryCopy> {
+  const cached = await readCachedStoryCopy(brief.place.id);
+  if (cached) {
+    return cached;
+  }
+  const copy = await generateSeaStoryCopy(brief);
+  await writeCachedStoryCopy(brief.place.id, copy);
+  return copy;
+}
 
 async function attachPanelArt(
   panels: ComicPanel[],
   brief: SeaStoryBrief,
+  placeId: string,
 ): Promise<ComicPanel[]> {
-  return Promise.all(
-    panels.map(async (panel) => {
-      if (panel.imageUrl) {
-        return panel;
-      }
-      const prompt = panel.imagePrompt.trim() || panel.caption;
-      const imageUrl = await generatePanelArt(prompt, brief.story.mood);
-      return { ...panel, imageUrl };
-    }),
-  );
+  const filled: ComicPanel[] = [];
+
+  for (const panel of panels) {
+    if (panel.imageUrl) {
+      filled.push(panel);
+      continue;
+    }
+    const prompt = panel.imagePrompt.trim() || panel.caption;
+    const imageUrl = await generatePanelArt(prompt, brief.story.mood);
+    const next = { ...panel, imageUrl };
+    filled.push(next);
+    await writePanelImages(placeId, filled);
+  }
+
+  return filled;
 }
 
 export async function generateCoastalEdition({ placeId }: { placeId: string }): Promise<ComicEdition> {
   const brief = await buildBriefForPlace(placeId);
-  const storyCopy = await generateSeaStoryCopy(brief);
   const cached = await readCachedEdition(placeId);
 
   if (cached && editionIsComplete(cached)) {
+    const storyCopy = await resolveStoryCopy(brief);
     return { ...cached, story: storyCopy };
   }
+
+  const storyCopy = await resolveStoryCopy(brief);
 
   let draft: Pick<ComicEdition, 'editionTitle' | 'panels' | 'footer'>;
 
   if (cached?.panels.length === EDITION_PANEL_COUNT) {
-    // Six-panel script cached but some images missing — fill gaps only.
     draft = cached;
   } else {
-    // Stale or missing cache (e.g. old 3-panel editions) — new 6-panel script.
     const generated = await generateStoryEdition(brief);
     draft = {
       editionTitle: generated.editionTitle,
@@ -51,9 +69,10 @@ export async function generateCoastalEdition({ placeId }: { placeId: string }): 
         imageUrl: cached?.panels[index]?.imageUrl,
       })),
     };
+    await writeCachedEdition(placeId, { ...draft, panels: draft.panels, story: storyCopy });
   }
 
-  const panels = await attachPanelArt(draft.panels, brief);
+  const panels = await attachPanelArt(draft.panels, brief, placeId);
   const edition: ComicEdition = { ...draft, panels, story: storyCopy };
   await writeCachedEdition(placeId, edition);
   return edition;

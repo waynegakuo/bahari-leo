@@ -1,4 +1,5 @@
 import { googleAI } from '@genkit-ai/google-genai';
+import { withGeminiRetry } from '../gemini-retry';
 import { STORY_MODEL } from './models';
 import { SEA_COPY_AGENT_INSTRUCTION } from './prompts/sea-copy-agent';
 import { getRuntime } from './runtime';
@@ -16,24 +17,28 @@ export async function generateBatchSeaStoryCopy(briefs: SeaStoryBrief[]): Promis
   }
 
   const ai = await getRuntime();
-  const { output } = await ai.generate({
-    model: googleAI.model(STORY_MODEL),
-    system: SEA_COPY_AGENT_INSTRUCTION,
-    prompt: JSON.stringify({
-      editionDate: briefs[0]?.app.editionDate,
-      places: briefs.map((brief) => ({
-        placeId: brief.place.id,
-        place: brief.place,
-        mood: brief.story.mood,
-        measurements: brief.measurements,
-        template: brief.story,
-        activities: brief.activities,
-        approvedSwahili: brief.approvedSwahili,
-      })),
-    }),
-    output: { schema: BatchSeaStoryCopySchema },
-    config: { temperature: 0.88 },
-  });
+  const { output } = await withGeminiRetry(
+    () =>
+      ai.generate({
+        model: googleAI.model(STORY_MODEL),
+        system: SEA_COPY_AGENT_INSTRUCTION,
+        prompt: JSON.stringify({
+          editionDate: briefs[0]?.app.editionDate,
+          places: briefs.map((brief) => ({
+            placeId: brief.place.id,
+            place: brief.place,
+            mood: brief.story.mood,
+            measurements: brief.measurements,
+            template: brief.story,
+            activities: brief.activities,
+            approvedSwahili: brief.approvedSwahili,
+          })),
+        }),
+        output: { schema: BatchSeaStoryCopySchema },
+        config: { temperature: 0.88 },
+      }),
+    'sea-copy agent',
+  );
 
   if (!output) {
     throw new Error('Sea-copy agent returned empty output');
