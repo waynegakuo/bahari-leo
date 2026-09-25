@@ -1,9 +1,9 @@
-import { Component, computed, DestroyRef, inject, linkedSignal, resource, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, linkedSignal, resource, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AiEdition } from '../../core/ai-edition';
 import { CoastBoard } from '../../core/coast-board';
 import { CoastState } from '../../core/coast-state';
-import { ActivityHint, SiteBoardRow } from '../../core/models';
+import { ActivityHint, SeaStory, SiteBoardRow } from '../../core/models';
 import { ComicEdition } from '../../core/sea-story-brief';
 import { greetingForNow, whaleSeasonNow, wildlifeLine } from '../../core/plain-speak';
 import {
@@ -17,12 +17,19 @@ import { EditionStrip } from '../../shared/edition-strip/edition-strip';
 import { SketchArt } from '../../shared/sketch-art/sketch-art';
 import {
   COAST_LOADING_MESSAGES,
+  COVER_LOADING_MESSAGES,
   EDITION_LOADING_MESSAGES,
   OceanLoading,
 } from '../../shared/ocean-loading/ocean-loading';
 import { StretchDock } from '../../shared/stretch-dock/stretch-dock';
 
 type TodayView = 'brief' | 'edition';
+
+interface CoverArtSlot {
+  loading: boolean;
+  imageUrl?: string;
+  failed?: boolean;
+}
 
 @Component({
   imports: [
@@ -42,10 +49,30 @@ type TodayView = 'brief' | 'edition';
   templateUrl: './today-page.html',
 })
 export class TodayPage {
+  private readonly coverArtByPlace = signal<Record<string, CoverArtSlot>>({});
+
   constructor() {
     this.destroyRef.onDestroy(() => {
       if (this.briefSwapTimer !== undefined) {
         window.clearTimeout(this.briefSwapTimer);
+      }
+    });
+
+    effect(() => {
+      if (!this.ai.configured() || !this.board.marineResource.hasValue()) {
+        return;
+      }
+      if (this.board.storyCopiesResource.isLoading()) {
+        return;
+      }
+      const featured = this.featured();
+      if (featured?.story) {
+        this.requestCoverArt(featured, featured.story);
+      }
+      for (const row of this.board.alsoToday()) {
+        if (row.story) {
+          this.requestCoverArt(row, row.story);
+        }
       }
     });
   }
@@ -54,7 +81,7 @@ export class TodayPage {
   protected readonly board = inject(CoastBoard);
   private readonly state = inject(CoastState);
   private readonly router = inject(Router);
-  private readonly ai = inject(AiEdition);
+  protected readonly ai = inject(AiEdition);
   private readonly destroyRef = inject(DestroyRef);
   private briefSwapTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -63,7 +90,23 @@ export class TodayPage {
     () => this.board.marineLoading() || this.board.aiStoriesLoading(),
   );
   protected readonly coastLoadingMessages = [...COAST_LOADING_MESSAGES];
+  protected readonly coverLoadingMessages = [...COVER_LOADING_MESSAGES];
   protected readonly editionLoadingMessages = [...EDITION_LOADING_MESSAGES];
+  protected readonly coverArt = computed(() => {
+    const placeId = this.featured()?.site.id;
+    if (!placeId) {
+      return null;
+    }
+    return this.coverArtByPlace()[placeId] ?? null;
+  });
+  protected readonly coverArtAlt = computed(() => {
+    const pick = this.featured();
+    const story = this.briefStory();
+    if (!pick || !story) {
+      return 'Coastal illustration';
+    }
+    return `${pick.site.name} — ${story.headline}`;
+  });
   protected readonly atfReady = computed(() => {
     if (this.board.marineResource.error()) {
       return false;
@@ -220,5 +263,44 @@ export class TodayPage {
       return `Good today: ${good.join(', ')}`;
     }
     return 'Stay flexible today.';
+  }
+
+  private requestCoverArt(row: SiteBoardRow, story: SeaStory): void {
+    const placeId = row.site.id;
+    const current = this.coverArtByPlace()[placeId];
+    if (current?.loading || current?.imageUrl || current?.failed) {
+      return;
+    }
+
+    this.coverArtByPlace.update((slots) => ({
+      ...slots,
+      [placeId]: { loading: true },
+    }));
+
+    void this.ai
+      .fetchCoverArt({
+        placeId,
+        placeName: row.site.name,
+        county: row.site.county,
+        story: {
+          mood: story.mood,
+          headline: story.headline,
+          blurb: story.blurb,
+        },
+      })
+      .then((result) => {
+        this.coverArtByPlace.update((slots) => ({
+          ...slots,
+          [placeId]: result.imageUrl
+            ? { loading: false, imageUrl: result.imageUrl }
+            : { loading: false, failed: true },
+        }));
+      })
+      .catch(() => {
+        this.coverArtByPlace.update((slots) => ({
+          ...slots,
+          [placeId]: { loading: false, failed: true },
+        }));
+      });
   }
 }

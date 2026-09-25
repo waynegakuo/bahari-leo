@@ -4,6 +4,7 @@
   <section
     class="sketch-atf"
     [class.sketch-atf--loading]="atfLoading()"
+    [class.sketch-atf--brief]="view() === 'brief' && atfReady()"
     [class.sketch-atf--edition]="view() === 'edition'"
   >
     @if (atfLoading()) {
@@ -65,29 +66,66 @@
               <bahari-sketch-art kind="sun" size="sm" class="cover-sketch__doodle cover-sketch__doodle--sun" />
               <bahari-sketch-art kind="boat" size="sm" class="cover-sketch__doodle cover-sketch__doodle--boat" />
 
-              <div class="cover-sketch__content">
+              <div class="cover-sketch__body">
                 <header class="cover-sketch__top">
                   <bl-mood-pill [mood]="pick.story?.mood ?? null" />
                   <p class="cover-sketch__place">{{ pick.site.name }} · {{ pick.site.county }}</p>
                 </header>
-                <h2 class="cover-sketch__headline bl-display">{{ briefStory()?.headline ?? 'Listening…' }}</h2>
-                @if (briefStory(); as story) {
-                  <p class="cover-sketch__swahili">{{ story.swahili }}</p>
-                  <p class="cover-sketch__blurb">{{ story.blurb }}</p>
-                  <div class="cover-sketch__more">
-                    <p class="cover-sketch__wind">{{ story.wind }}</p>
-                    <ul class="cover-sketch__acts">
-                      @for (act of story.activities; track act.id) {
-                        @if (act.ok) {
-                          <li>
-                            <bl-badge tone="ok">{{ act.label }}</bl-badge>
-                          </li>
-                        }
-                      }
-                    </ul>
+
+                <div class="cover-sketch__split">
+                  <div class="cover-sketch__copy">
+                    <h2 class="cover-sketch__headline bl-display">{{ briefStory()?.headline ?? 'Listening…' }}</h2>
+                    @if (briefStory(); as story) {
+                      <p class="cover-sketch__swahili">{{ story.swahili }}</p>
+                      <p class="cover-sketch__blurb">{{ story.blurb }}</p>
+                      <div class="cover-sketch__more">
+                        <p class="cover-sketch__wind">{{ story.wind }}</p>
+                        <ul class="cover-sketch__acts">
+                          @for (act of story.activities; track act.id) {
+                            @if (act.ok) {
+                              <li>
+                                <bl-badge tone="ok">{{ act.label }}</bl-badge>
+                              </li>
+                            }
+                          }
+                        </ul>
+                      </div>
+                    }
                   </div>
-                }
+
+                  @if (ai.configured()) {
+                    <div class="cover-sketch__visual">
+                      <figure class="cover-sketch__art" [attr.data-mood]="pick.story?.mood">
+                        @if (coverArt()?.imageUrl; as imageUrl) {
+                          <img
+                            class="cover-sketch__art-img"
+                            [src]="imageUrl"
+                            [alt]="coverArtAlt()"
+                            loading="lazy"
+                          />
+                        } @else if (coverArt()?.loading) {
+                          <div class="cover-sketch__art-load">
+                            <bahari-ocean-loading
+                              class="cover-sketch__art-spinner"
+                              [messages]="coverLoadingMessages"
+                              [rotateMs]="2200"
+                            />
+                          </div>
+                        } @else if (coverArt()?.failed) {
+                          <div class="cover-sketch__art-fallback" aria-hidden="true">
+                            <bahari-sketch-art kind="waves" size="md" />
+                          </div>
+                        } @else {
+                          <div class="cover-sketch__art-load cover-sketch__art-load--idle" aria-hidden="true">
+                            <bahari-sketch-art kind="boat" size="md" />
+                          </div>
+                        }
+                      </figure>
+                    </div>
+                  }
+                </div>
               </div>
+
               <div class="cover-sketch__actions">
                 <bl-button (click)="goThere()">Take me there</bl-button>
                 <bl-button variant="secondary" [disabled]="briefSwapping()" (click)="another()">

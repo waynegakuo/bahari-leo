@@ -11,6 +11,14 @@ export const COAST_LOADING_MESSAGES = [
   'Writing today\'s story…',
 ] as const;
 
+export const COVER_LOADING_MESSAGES = [
+  'Painting today\'s shore…',
+  'Mixing the ink…',
+  'Sketching the coast…',
+  'Adding the morning light…',
+  'Almost ready…',
+] as const;
+
 export const EDITION_LOADING_MESSAGES = [
   'Inking today\'s edition…',
   'Sketching the panels…',
