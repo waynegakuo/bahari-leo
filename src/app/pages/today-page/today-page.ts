@@ -275,7 +275,7 @@ export class TodayPage {
       { caption: story.waves },
       { caption: story.wind },
       { caption: story.water },
-      { caption: story.swahili },
+      { caption: 'Sauti ya pwani inakuja…' },
       { caption: story.blurb },
       { caption: this.activityCaption(story.activities) },
     ];

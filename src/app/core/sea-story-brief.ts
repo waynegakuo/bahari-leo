@@ -28,7 +28,6 @@ export interface SeaStoryBrief {
     dolphinSites: string[];
     note: string;
   };
-  approvedSwahili: string[];
   generatedAt: string;
 }
 
@@ -39,12 +38,6 @@ export interface ComicEdition {
   footer: string;
   story?: SeaStoryCopy & { mood?: SeaStory['mood'] };
 }
-
-const APPROVED_SWAHILI = [
-  'Bahari ni shwari',
-  'Bahari inachachamaa',
-  'Kaa pwani leo',
-] as const;
 
 const DOLPHIN_SITES = ['Shimoni', 'Watamu'];
 
@@ -86,7 +79,6 @@ export function buildSeaStoryBrief(row: SiteBoardRow, region: CoastRegion): SeaS
       dolphinSites: DOLPHIN_SITES,
       note: 'Wildlife live in known areas year-round. Describe their home on the coast.',
     },
-    approvedSwahili: [...APPROVED_SWAHILI],
     generatedAt: now.toISOString(),
   };
 }

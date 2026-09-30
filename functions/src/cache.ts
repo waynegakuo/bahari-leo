@@ -6,6 +6,9 @@ import { ComicEdition, ComicPanel } from './sea/types';
 const COLLECTION = 'editions';
 const IMAGES = 'images';
 
+/** Bump when comic script prompts change so stale editions are not reused. */
+export const EDITION_PROMPT_VERSION = 2;
+
 let appReady = false;
 
 function firestoreOrNull() {
@@ -78,7 +81,7 @@ export async function readCachedEdition(placeId: string): Promise<ComicEdition |
     const docId = editionDocId(placeId);
     const snap = await db.collection(COLLECTION).doc(docId).get();
     const data = snap.data();
-    if (!data?.edition) {
+    if (!data?.edition || data['promptVersion'] !== EDITION_PROMPT_VERSION) {
       return null;
     }
     const edition = data.edition as ComicEdition;
@@ -100,6 +103,7 @@ export async function writeCachedEdition(placeId: string, edition: ComicEdition)
     await db.collection(COLLECTION).doc(docId).set({
       placeId,
       date: nairobiDate(),
+      promptVersion: EDITION_PROMPT_VERSION,
       edition: stripImages(edition),
       createdAt: new Date().toISOString(),
     });

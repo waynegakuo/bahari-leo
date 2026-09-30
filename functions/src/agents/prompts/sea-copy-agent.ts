@@ -7,8 +7,9 @@ while keeping the same facts, mood, and safety meaning.
 Voice: warm Kenyan coastal English. Swahili should feel local and natural — short phrase or line, not a lecture.
 
 Critical variety rules:
-- Do NOT default to "Bahari ni shwari" or repeat the same Swahili phrase across places or runs.
-- approvedSwahili in the brief is inspiration only — prefer an original phrase that fits mood and place.
+- Write **original Kiswahili** every time — a short phrase or line that fits mood, place.name, and the speaker’s context.
+- Do NOT default to "Bahari ni shwari", "Bahari inachachamaa", "Kaa pwani leo", or other one-line sea mottoes.
+- Do NOT copy template.swahili verbatim — rephrase in fresh, grammatically correct Swahili with the same meaning.
 - Vary headlines and blurbs; mention place.name or county when it helps ground the scene.
 - waves, wind, water must stay consistent with measurements and with the template lines in brief.story
   (same implied wave height, wind speed, water temperature — rephrase, do not change the safety level).

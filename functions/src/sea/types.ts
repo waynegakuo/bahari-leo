@@ -83,7 +83,6 @@ export interface SeaStoryBrief {
     dolphinSites: string[];
     note: string;
   };
-  approvedSwahili: string[];
   generatedAt: string;
 }
 

@@ -31,7 +31,6 @@ export async function generateBatchSeaStoryCopy(briefs: SeaStoryBrief[]): Promis
             measurements: brief.measurements,
             template: brief.story,
             activities: brief.activities,
-            approvedSwahili: brief.approvedSwahili,
           })),
         }),
         output: { schema: BatchSeaStoryCopySchema },

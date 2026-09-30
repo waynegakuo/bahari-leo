@@ -5,14 +5,6 @@ import { greetingForNow, tellSeaStory, whaleSeasonNow } from './plain-speak';
 import { REGION_LABEL, siteById } from './sites';
 import { SeaStoryBrief } from './types';
 
-/** Examples only — the sea-copy agent should prefer fresh phrases. */
-const APPROVED_SWAHILI = [
-  'Bahari ni shwari',
-  'Bahari inachachamaa',
-  'Kaa pwani leo',
-  'Mawimbi ni laini',
-  'Upepo mzuri leo',
-] as const;
 const DOLPHIN_SITES = ['Shimoni', 'Watamu'];
 
 export async function buildBriefForPlace(placeId: string): Promise<SeaStoryBrief> {
@@ -57,7 +49,6 @@ export async function buildBriefForPlace(placeId: string): Promise<SeaStoryBrief
       dolphinSites: [...DOLPHIN_SITES],
       note: 'Wildlife live in known areas year-round. Describe their home on the coast.',
     },
-    approvedSwahili: [...APPROVED_SWAHILI],
     generatedAt: nairobiNowIso(now),
   };
 }

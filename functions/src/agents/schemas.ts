@@ -4,12 +4,12 @@ export const ComicPanelSchema = z.object({
   caption: z
     .string()
     .describe(
-      'Comic dialogue or narration box — short, visual, present tense. Kenyan coastal voice; optional approved Swahili.',
+      'Comic dialogue or narration box — short, visual, present tense. One protagonist POV across all panels. Panel 4 only: original Kiswahili speech (never copy brief.story.swahili). Other panels: Kenyan coastal English.',
     ),
   imagePrompt: z
     .string()
     .describe(
-      'Required visual brief for the panel-art agent: Kenya coast scene, Kenyan characters where natural, editorial comic style.',
+      'Required visual brief for the panel-art agent: Kenya coast scene, same named protagonist (age, role, clothing) when people appear, editorial ink-and-wash comic style.',
     ),
 });
 
