@@ -368,7 +368,7 @@
   overscroll-behavior-x: contain;
   scrollbar-width: none;
   justify-content: safe center;
-  padding: var(--bl-space-1) 0;
+  padding: 1.85rem var(--bl-space-1) var(--bl-space-1);
 }
 
 .brief-pager__marks::-webkit-scrollbar {
@@ -376,6 +376,7 @@
 }
 
 .brief-pager__mark {
+  position: relative;
   flex-shrink: 0;
   width: 0.55rem;
   height: 0.55rem;
@@ -392,6 +393,36 @@
     padding var(--bl-duration) var(--bl-ease),
     transform var(--bl-duration) var(--bl-ease),
     background var(--bl-duration) var(--bl-ease);
+}
+
+.brief-pager__tip {
+  position: absolute;
+  bottom: calc(100% + 0.45rem);
+  left: 50%;
+  z-index: 4;
+  padding: 0.2rem 0.55rem;
+  border: var(--bl-sketch-border);
+  border-radius: var(--bl-sketch-radius-sm);
+  background: var(--bl-surface);
+  box-shadow: var(--bl-sketch-shadow);
+  color: var(--bl-ink);
+  font-family: var(--bl-font-display);
+  font-size: var(--bl-text-sm);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) translateY(0.15rem) rotate(-0.5deg);
+  transition:
+    opacity var(--bl-duration) var(--bl-ease),
+    transform var(--bl-duration) var(--bl-ease);
+}
+
+.brief-pager__mark:hover:not(:disabled) .brief-pager__tip,
+.brief-pager__mark:focus-visible .brief-pager__tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) rotate(-0.5deg);
 }
 
 .brief-pager__mark:hover:not(:disabled):not(.brief-pager__mark--on) {

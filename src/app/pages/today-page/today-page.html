@@ -147,6 +147,9 @@
                                 [disabled]="briefSwapping()"
                                 (click)="browseTo(i)"
                               >
+                                @if (i !== browsableIndex()) {
+                                  <span class="brief-pager__tip">{{ row.site.name }}</span>
+                                }
                                 @if (i === browsableIndex()) {
                                   {{ row.site.name }}
                                 }
