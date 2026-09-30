@@ -2,6 +2,7 @@ import { Component, computed, DestroyRef, effect, inject, resource, signal } fro
 import { Router, RouterLink } from '@angular/router';
 import { AiEdition } from '../../core/ai-edition';
 import { CoverArtCache } from '../../core/cover-art-cache';
+import { EditionCache } from '../../core/edition-cache';
 import { CoastBoard } from '../../core/coast-board';
 import { CoastState } from '../../core/coast-state';
 import { ActivityHint, SeaStory, SiteBoardRow } from '../../core/models';
@@ -45,6 +46,7 @@ type TodayView = 'brief' | 'edition';
 })
 export class TodayPage {
   private readonly coverArtCache = inject(CoverArtCache);
+  private readonly editionCache = inject(EditionCache);
 
   constructor() {
     this.destroyRef.onDestroy(() => {
@@ -126,7 +128,13 @@ export class TodayPage {
       const placeId = this.featured()?.site.id;
       return placeId ? { placeId } : undefined;
     },
-    loader: ({ params, abortSignal }) => this.ai.fetchEdition(params.placeId, abortSignal),
+    loader: ({ params }) => {
+      const cached = this.editionCache.edition(params.placeId);
+      if (cached) {
+        return Promise.resolve(cached);
+      }
+      return this.editionCache.fetchEdition(this.ai, params.placeId);
+    },
   });
   /** Brief copy — from coast board only; never overwritten when edition loads */
   protected readonly briefStory = computed(() => this.featured()?.story ?? null);
