@@ -83,7 +83,7 @@ export class CoastBoard {
     this.inspectResource.error() ? FORECAST_UNAVAILABLE : null,
   );
   readonly todaysPick = computed(() => pickForToday(this.rows()));
-  /** User's chosen place, or today's pick when none is set */
+  /** User's chosen place, or the first story in the browse queue on a fresh load */
   readonly activeStory = computed(() => {
     const rows = this.rows();
     const activeId = this.state.activePlaceId();
@@ -93,7 +93,7 @@ export class CoastBoard {
         return active;
       }
     }
-    return this.todaysPick();
+    return rows.find((row) => row.story) ?? null;
   });
   readonly alsoToday = computed(() =>
     this.rows()
