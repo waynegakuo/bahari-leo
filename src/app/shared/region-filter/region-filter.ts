@@ -2,7 +2,7 @@ import { Component, inject, input, output } from '@angular/core';
 import { CoastState } from '../../core/coast-state';
 import { REGIONS } from '../../core/kenya-coast';
 import { RegionId } from '../../core/models';
-import { BlChip } from '../../design-system';
+import { BlChip, BlChipTone } from '../../design-system';
 
 @Component({
   imports: [BlChip],
@@ -13,6 +13,7 @@ import { BlChip } from '../../design-system';
 export class RegionFilter {
   readonly showSummary = input(false);
   readonly layout = input<'row' | 'stack'>('row');
+  readonly tone = input<BlChipTone>('light');
   readonly regionSelected = output<RegionId>();
   protected readonly state = inject(CoastState);
   protected readonly regions = REGIONS;

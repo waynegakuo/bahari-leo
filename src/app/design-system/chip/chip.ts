@@ -1,6 +1,11 @@
 import { Component, input, output } from '@angular/core';
 
+export type BlChipTone = 'dark' | 'light';
+
 @Component({
+  host: {
+    '[attr.data-tone]': 'tone()',
+  },
   selector: 'bl-chip',
   styleUrl: './chip.css',
   template: `
@@ -20,5 +25,7 @@ import { Component, input, output } from '@angular/core';
 export class BlChip {
   readonly selected = input(false);
   readonly disabled = input(false);
+  /** Light tone for paper/surface backgrounds; dark for tide/sea panels */
+  readonly tone = input<BlChipTone>('dark');
   readonly selectedChange = output<boolean>();
 }

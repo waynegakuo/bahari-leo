@@ -1,6 +1,7 @@
 <div class="row" [class.row--stack]="layout() === 'stack'" role="radiogroup" aria-label="Coastal area">
   @for (region of regions; track region.id) {
     <bl-chip
+      [tone]="tone()"
       [selected]="state.region().id === region.id"
       (selectedChange)="select(region.id)"
     >

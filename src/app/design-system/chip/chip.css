@@ -14,7 +14,10 @@
   color: #fff;
   cursor: pointer;
   box-shadow: 2px 3px 0 rgb(0 0 0 / 0.15);
-  transition: transform var(--bl-duration) var(--bl-ease);
+  transition:
+    transform var(--bl-duration) var(--bl-ease),
+    background var(--bl-duration) var(--bl-ease),
+    color var(--bl-duration) var(--bl-ease);
 }
 
 .chip:hover:not(:disabled) {
@@ -33,25 +36,29 @@
   cursor: not-allowed;
 }
 
-:host-context(.chip-light) .chip,
-:host-context(.sketch-filter-bar__tray) .chip {
+/* Paper / surface backgrounds */
+:host([data-tone='light']) .chip {
   border: var(--bl-sketch-border);
   background: var(--bl-surface);
-  color: var(--bl-ink);
+  color: var(--bl-ink-soft);
   box-shadow: 2px 3px 0 rgb(42 37 32 / 0.1);
 }
 
-:host-context(.chip-light) .chip--on,
-:host-context(.sketch-filter-bar__tray) .chip--on {
+:host([data-tone='light']) .chip:hover:not(:disabled):not(.chip--on) {
+  transform: rotate(-0.8deg);
+  background: var(--bl-surface-note);
+  color: var(--bl-ink);
+}
+
+:host([data-tone='light']) .chip--on {
   background: var(--bl-sea);
   border-color: var(--bl-ink);
   color: #fff;
 }
 
-:host-context(.chip-light) .chip:hover:not(:disabled),
-:host-context(.sketch-filter-bar__tray) .chip:hover:not(:disabled) {
-  transform: rotate(-0.8deg);
-  background: var(--bl-surface-note);
+:host([data-tone='light']) .chip--on:hover:not(:disabled) {
+  transform: rotate(0.5deg);
+  background: var(--bl-tide-mid);
 }
 
 :host-context(.row--stack) {
