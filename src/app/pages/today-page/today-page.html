@@ -121,6 +121,50 @@
                           </div>
                         }
                       </figure>
+
+                      @if (browsableCount() > 1) {
+                        <nav class="brief-pager" aria-label="Browse coastal sites">
+                          <button
+                            type="button"
+                            class="brief-pager__arrow"
+                            aria-label="Previous place"
+                            [disabled]="briefSwapping()"
+                            (click)="browsePrevious()"
+                          >
+                            ‹
+                          </button>
+
+                          <div class="brief-pager__marks" role="tablist" aria-label="Places">
+                            @for (row of browsable(); track row.site.id; let i = $index) {
+                              <button
+                                type="button"
+                                class="brief-pager__mark"
+                                role="tab"
+                                [class.brief-pager__mark--on]="i === browsableIndex()"
+                                [attr.aria-selected]="i === browsableIndex()"
+                                [attr.aria-label]="row.site.name"
+                                [attr.data-mood]="row.story?.mood"
+                                [disabled]="briefSwapping()"
+                                (click)="browseTo(i)"
+                              >
+                                @if (i === browsableIndex()) {
+                                  {{ row.site.name }}
+                                }
+                              </button>
+                            }
+                          </div>
+
+                          <button
+                            type="button"
+                            class="brief-pager__arrow"
+                            aria-label="Next place"
+                            [disabled]="briefSwapping()"
+                            (click)="browseNext()"
+                          >
+                            ›
+                          </button>
+                        </nav>
+                      }
                     </div>
                   }
                 </div>
@@ -128,9 +172,6 @@
 
               <div class="cover-sketch__actions">
                 <bl-button (click)="goThere()">Take me there</bl-button>
-                <bl-button variant="secondary" [disabled]="briefSwapping()" (click)="another()">
-                  Somewhere else
-                </bl-button>
               </div>
             </article>
           } @else {

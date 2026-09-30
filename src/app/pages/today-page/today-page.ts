@@ -159,6 +159,15 @@ export class TodayPage {
     () => this.generatedEdition()?.footer ?? 'Bahari Leo · today’s forecast',
   );
   protected readonly editionIsGenerated = computed(() => this.editionResource.hasValue());
+  protected readonly browsable = computed(() => this.board.rows().filter((row) => row.story));
+  protected readonly browsableIndex = computed(() => {
+    const id = this.featured()?.site.id;
+    if (!id) {
+      return -1;
+    }
+    return this.browsable().findIndex((row) => row.site.id === id);
+  });
+  protected readonly browsableCount = computed(() => this.browsable().length);
   protected readonly wildlife = computed(() => {
     const row = this.board.dolphinWatch() ?? (this.featured()?.site.watch === 'dolphins' ? this.featured() : null);
     if (!row?.story) {
@@ -199,13 +208,20 @@ export class TodayPage {
     void this.router.navigateByUrl('/map');
   }
 
-  another(): void {
-    const current = this.featured()?.site.id;
-    const pool = this.board.rows().filter((row) => row.story && row.site.id !== current);
-    const next = pool[Math.floor(Math.random() * pool.length)];
-    if (next) {
-      this.queueBriefSwap(() => this.featured.set(next));
+  browsePrevious(): void {
+    this.browseByOffset(-1);
+  }
+
+  browseNext(): void {
+    this.browseByOffset(1);
+  }
+
+  browseTo(index: number): void {
+    const row = this.browsable()[index];
+    if (!row || row.site.id === this.featured()?.site.id) {
+      return;
     }
+    this.queueBriefSwap(() => this.featured.set(row));
   }
 
   openCard(row: SiteBoardRow): void {
@@ -217,6 +233,16 @@ export class TodayPage {
 
   setView(next: TodayView): void {
     this.view.set(next);
+  }
+
+  private browseByOffset(offset: number): void {
+    const list = this.browsable();
+    const index = this.browsableIndex();
+    if (list.length < 2 || index < 0) {
+      return;
+    }
+    const next = list[(index + offset + list.length) % list.length];
+    this.queueBriefSwap(() => this.featured.set(next));
   }
 
   private queueBriefSwap(swap: () => void): void {
