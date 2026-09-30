@@ -1,6 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { defaultOverlayDate, MOMBASA_POINT, regionById, siteById, sitesForRegion } from './kenya-coast';
-import { BaseMapId, InspectTarget, LayerState, OverlayKey, RegionId } from './models';
+import { BaseMapId, InspectTarget, LandingSite, LayerState, OverlayKey, RegionId } from './models';
 
 const INITIAL_LAYERS: LayerState = {
   baseMap: 'chart',
@@ -15,6 +15,7 @@ const INITIAL_LAYERS: LayerState = {
 export class CoastState {
   private readonly regionId = signal<RegionId>('coast');
   private readonly overlayDateValue = signal(defaultOverlayDate());
+  private readonly activePlaceIdValue = signal<string | null>(null);
   private readonly selectedValue = signal<InspectTarget>({
     lat: MOMBASA_POINT.lat,
     lon: MOMBASA_POINT.lon,
@@ -26,6 +27,8 @@ export class CoastState {
 
   readonly region = computed(() => regionById(this.regionId()));
   readonly overlayDate = this.overlayDateValue.asReadonly();
+  /** Last story / place the user chose — survives route changes within the session */
+  readonly activePlaceId = this.activePlaceIdValue.asReadonly();
   readonly selected = this.selectedValue.asReadonly();
   readonly layers = this.layerState.asReadonly();
   readonly chlorophyll = computed(() => this.layerState().chlorophyll);
@@ -39,9 +42,9 @@ export class CoastState {
   setRegion(id: RegionId): void {
     this.regionId.set(id);
     const sites = sitesForRegion(id);
-    const current = this.selectedValue();
-    if (!sites.some((site) => site.id === current.siteId) && sites[0]) {
-      this.selectSite(sites[0].id);
+    const active = this.activePlaceIdValue();
+    if (active && !sites.some((site) => site.id === active)) {
+      this.activePlaceIdValue.set(null);
     }
   }
 
@@ -59,17 +62,23 @@ export class CoastState {
     this.layerState.update((layers) => ({ ...layers, [key]: !layers[key] }));
   }
 
-  selectSite(id: string): void {
+  setActivePlace(id: string): void {
     const site = siteById(id);
     if (!site) {
       return;
     }
+    this.ensureRegionIncludes(site.id, site.region);
+    this.activePlaceIdValue.set(id);
     this.selectedValue.set({
       lat: site.lat,
       lon: site.lon,
       label: site.name,
       siteId: site.id,
     });
+  }
+
+  selectSite(id: string): void {
+    this.setActivePlace(id);
     this.panelOpen.set(true);
   }
 
@@ -80,5 +89,12 @@ export class CoastState {
 
   closePanel(): void {
     this.panelOpen.set(false);
+  }
+
+  private ensureRegionIncludes(siteId: string, siteRegion: LandingSite['region']): void {
+    const inRegion = sitesForRegion(this.regionId()).some((site) => site.id === siteId);
+    if (!inRegion) {
+      this.regionId.set(siteRegion);
+    }
   }
 }

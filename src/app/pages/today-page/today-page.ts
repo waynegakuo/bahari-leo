@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, linkedSignal, resource, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, resource, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AiEdition } from '../../core/ai-edition';
 import { CoverArtCache } from '../../core/cover-art-cache';
@@ -117,10 +117,17 @@ export class TodayPage {
     }
     return Boolean(this.featured());
   });
-  /** Resets to today's pick when the region changes; user can override via also-today / somewhere else */
-  protected readonly featured = linkedSignal({
-    source: () => this.state.region().id,
-    computation: () => this.board.todaysPick(),
+  /** Session-persisted via CoastState.activePlaceId; falls back to today's pick */
+  protected readonly featured = computed(() => {
+    const rows = this.board.rows();
+    const activeId = this.state.activePlaceId();
+    if (activeId) {
+      const active = rows.find((row) => row.site.id === activeId);
+      if (active) {
+        return active;
+      }
+    }
+    return this.board.todaysPick();
   });
   protected readonly editionResource = resource({
     params: () => {
@@ -216,14 +223,14 @@ export class TodayPage {
     if (!row || row.site.id === this.featured()?.site.id) {
       return;
     }
-    this.queueBriefSwap(() => this.featured.set(row));
+    this.queueBriefSwap(() => this.state.setActivePlace(row.site.id));
   }
 
   openCard(row: SiteBoardRow): void {
     if (row.site.id === this.featured()?.site.id) {
       return;
     }
-    this.queueBriefSwap(() => this.featured.set(row));
+    this.queueBriefSwap(() => this.state.setActivePlace(row.site.id));
   }
 
   setView(next: TodayView): void {
@@ -237,7 +244,7 @@ export class TodayPage {
       return;
     }
     const next = list[(index + offset + list.length) % list.length];
-    this.queueBriefSwap(() => this.featured.set(next));
+    this.queueBriefSwap(() => this.state.setActivePlace(next.site.id));
   }
 
   private queueBriefSwap(swap: () => void): void {

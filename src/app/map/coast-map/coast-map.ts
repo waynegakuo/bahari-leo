@@ -41,16 +41,20 @@ export class CoastMap {
   private parksLayer?: L.LayerGroup;
   private sitesLayer?: L.LayerGroup;
   private selectedMarker?: L.CircleMarker;
-  private createdAt = 0;
 
   constructor() {
     afterNextRender(() => this.createMap());
 
     effect(() => {
       this.state.region();
-      if (this.mapReady()) {
-        this.fitToRegion();
+      if (!this.mapReady()) {
+        return;
       }
+      if (this.state.panelOpen() && this.state.selected().siteId) {
+        this.syncSelected();
+        return;
+      }
+      this.fitToRegion();
     });
 
     effect(() => {
@@ -106,8 +110,12 @@ export class CoastMap {
       this.state.selectPoint(event.latlng.lat, event.latlng.lng, 'This spot');
     });
     this.mapReady.set(true);
-    this.createdAt = Date.now();
-    setTimeout(() => this.fitToRegion(), 80);
+    const selected = this.state.selected();
+    if (this.state.panelOpen() && selected.siteId) {
+      this.map.setView([selected.lat, selected.lon], 11);
+    } else {
+      setTimeout(() => this.fitToRegion(), 80);
+    }
     this.destroyRef.onDestroy(() => {
       this.map?.remove();
       this.map = undefined;
@@ -226,7 +234,7 @@ export class CoastMap {
       fillColor: '#f3eee4',
       fillOpacity: 0.9,
     }).addTo(this.map);
-    if (this.state.panelOpen() && Date.now() - this.createdAt > 400) {
+    if (this.state.panelOpen()) {
       const zoom = Math.min(12, Math.max(this.map.getZoom(), 11));
       this.map.flyTo([selected.lat, selected.lon], zoom, { duration: 0.85 });
     }
