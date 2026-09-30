@@ -4,7 +4,7 @@
   <div class="chrome">
     <section class="legend-card" aria-label="How to read the map">
       <p class="banner">
-        @if (board.todaysPick(); as pick) {
+        @if (board.activeStory(); as pick) {
           Today’s stretch: <strong>{{ pick.site.name }}</strong>.
           {{ pick.story?.headline ?? 'Tap a pin and we’ll tell you how the sea feels.' }}
         } @else {

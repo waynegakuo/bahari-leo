@@ -83,9 +83,21 @@ export class CoastBoard {
     this.inspectResource.error() ? FORECAST_UNAVAILABLE : null,
   );
   readonly todaysPick = computed(() => pickForToday(this.rows()));
+  /** User's chosen place, or today's pick when none is set */
+  readonly activeStory = computed(() => {
+    const rows = this.rows();
+    const activeId = this.state.activePlaceId();
+    if (activeId) {
+      const active = rows.find((row) => row.site.id === activeId);
+      if (active) {
+        return active;
+      }
+    }
+    return this.todaysPick();
+  });
   readonly alsoToday = computed(() =>
     this.rows()
-      .filter((row) => row.site.id !== this.todaysPick()?.site.id && row.story)
+      .filter((row) => row.site.id !== this.activeStory()?.site.id && row.story)
       .slice(0, 3),
   );
   readonly dolphinWatch = computed(() =>

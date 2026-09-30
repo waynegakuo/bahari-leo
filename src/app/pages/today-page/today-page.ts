@@ -117,18 +117,7 @@ export class TodayPage {
     }
     return Boolean(this.featured());
   });
-  /** Session-persisted via CoastState.activePlaceId; falls back to today's pick */
-  protected readonly featured = computed(() => {
-    const rows = this.board.rows();
-    const activeId = this.state.activePlaceId();
-    if (activeId) {
-      const active = rows.find((row) => row.site.id === activeId);
-      if (active) {
-        return active;
-      }
-    }
-    return this.board.todaysPick();
-  });
+  protected readonly featured = this.board.activeStory;
   protected readonly editionResource = resource({
     params: () => {
       if (!this.ai.configured() || this.view() !== 'edition') {
