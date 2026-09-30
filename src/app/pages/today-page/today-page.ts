@@ -1,6 +1,7 @@
 import { Component, computed, DestroyRef, effect, inject, linkedSignal, resource, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AiEdition, AiRateLimitError } from '../../core/ai-edition';
+import { AiEdition } from '../../core/ai-edition';
+import { CoverArtCache } from '../../core/cover-art-cache';
 import { CoastBoard } from '../../core/coast-board';
 import { CoastState } from '../../core/coast-state';
 import { ActivityHint, SeaStory, SiteBoardRow } from '../../core/models';
@@ -25,12 +26,6 @@ import { StretchDock } from '../../shared/stretch-dock/stretch-dock';
 
 type TodayView = 'brief' | 'edition';
 
-interface CoverArtSlot {
-  loading: boolean;
-  imageUrl?: string;
-  failed?: boolean;
-}
-
 @Component({
   imports: [
     StretchDock,
@@ -49,7 +44,7 @@ interface CoverArtSlot {
   templateUrl: './today-page.html',
 })
 export class TodayPage {
-  private readonly coverArtByPlace = signal<Record<string, CoverArtSlot>>({});
+  private readonly coverArtCache = inject(CoverArtCache);
 
   constructor() {
     this.destroyRef.onDestroy(() => {
@@ -96,7 +91,7 @@ export class TodayPage {
     if (!placeId) {
       return null;
     }
-    return this.coverArtByPlace()[placeId] ?? null;
+    return this.coverArtCache.store()[placeId] ?? null;
   });
   protected readonly coverArtAlt = computed(() => {
     const pick = this.featured();
@@ -291,56 +286,15 @@ export class TodayPage {
   }
 
   private requestCoverArt(row: SiteBoardRow, story: SeaStory): void {
-    const placeId = row.site.id;
-    const current = this.coverArtByPlace()[placeId];
-    if (current?.loading || current?.imageUrl || current?.failed) {
-      return;
-    }
-
-    this.coverArtByPlace.update((slots) => ({
-      ...slots,
-      [placeId]: { loading: true },
-    }));
-
-    void this.ai
-      .fetchCoverArt({
-        placeId,
-        placeName: row.site.name,
-        county: row.site.county,
-        story: {
-          mood: story.mood,
-          headline: story.headline,
-          blurb: story.blurb,
-        },
-      })
-      .then((result) => {
-        this.coverArtByPlace.update((slots) => ({
-          ...slots,
-          [placeId]: result.imageUrl
-            ? { loading: false, imageUrl: result.imageUrl }
-            : { loading: false, failed: true },
-        }));
-      })
-      .catch((err) => {
-        if (err instanceof AiRateLimitError) {
-          this.coverArtByPlace.update((slots) => ({
-            ...slots,
-            [placeId]: { loading: false },
-          }));
-          window.setTimeout(() => {
-            this.coverArtByPlace.update((slots) => {
-              const next = { ...slots };
-              delete next[placeId];
-              return next;
-            });
-            this.requestCoverArt(row, story);
-          }, err.retryAfterSec * 1_000);
-          return;
-        }
-        this.coverArtByPlace.update((slots) => ({
-          ...slots,
-          [placeId]: { loading: false, failed: true },
-        }));
-      });
+    this.coverArtCache.request(this.ai, {
+      placeId: row.site.id,
+      placeName: row.site.name,
+      county: row.site.county,
+      story: {
+        mood: story.mood,
+        headline: story.headline,
+        blurb: story.blurb,
+      },
+    });
   }
 }
