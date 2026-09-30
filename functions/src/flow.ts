@@ -22,6 +22,30 @@ async function resolveStoryCopy(brief: SeaStoryBrief): Promise<SeaStoryCopy> {
   return copy;
 }
 
+const PANEL_ART_ATTEMPTS = 3;
+
+async function resolvePanelImage(
+  panel: ComicPanel,
+  index: number,
+  brief: SeaStoryBrief,
+  placeId: string,
+): Promise<string | undefined> {
+  if (panel.imageUrl) {
+    return panel.imageUrl;
+  }
+
+  const prompt = panel.imagePrompt.trim() || panel.caption;
+  for (let attempt = 0; attempt < PANEL_ART_ATTEMPTS; attempt++) {
+    const imageUrl = await generatePanelArt(prompt, brief.story.mood);
+    if (imageUrl) {
+      return imageUrl;
+    }
+    console.warn('panel-art returned no image', { placeId, index, attempt });
+  }
+
+  return undefined;
+}
+
 async function attachPanelArt(
   panels: ComicPanel[],
   brief: SeaStoryBrief,
@@ -29,13 +53,9 @@ async function attachPanelArt(
 ): Promise<ComicPanel[]> {
   const filled: ComicPanel[] = [];
 
-  for (const panel of panels) {
-    if (panel.imageUrl) {
-      filled.push(panel);
-      continue;
-    }
-    const prompt = panel.imagePrompt.trim() || panel.caption;
-    const imageUrl = await generatePanelArt(prompt, brief.story.mood);
+  for (let index = 0; index < panels.length; index++) {
+    const panel = panels[index]!;
+    const imageUrl = await resolvePanelImage(panel, index, brief, placeId);
     const next = { ...panel, imageUrl };
     filled.push(next);
     await writePanelImages(placeId, filled);

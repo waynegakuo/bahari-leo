@@ -89,7 +89,7 @@ export interface SeaStoryBrief {
 export interface ComicPanel {
   caption: string;
   imagePrompt: string;
-  /** Base64 data URL — cached in Firestore, no Cloud Storage. */
+  /** Base64 data URL returned to clients; large panels are chunked in Firestore when cached. */
   imageUrl?: string;
 }
 
