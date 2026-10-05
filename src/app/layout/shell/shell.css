@@ -118,6 +118,8 @@
 
 main {
   min-height: 0;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 @media (min-width: 860px) {

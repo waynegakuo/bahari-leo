@@ -4,6 +4,10 @@
 @import './design-system/sketch.css';
 @import './design-system/utilities.css';
 
+html {
+  overflow-x: clip;
+}
+
 html,
 body {
   height: 100%;
