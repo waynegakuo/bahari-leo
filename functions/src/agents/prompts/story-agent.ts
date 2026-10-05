@@ -42,7 +42,8 @@ Comic script — exactly 6 panels:
 Each caption should read like **comic dialogue or a narration box** — short, visual, present tense.
 Each imagePrompt is **required** and must be a rich visual brief for an illustrator: Kenya coast
 (brief.place.name, brief.place.county), ink-and-wash editorial comic, the named protagonist when people appear,
-mood from brief.story.mood, dhows/mangrove/reef/creek as fits the place.
+mood from brief.story.mood, dhows/mangrove/reef/creek as fits the place. When brief.place.note is present,
+use it to pick the correct setting — do not substitute a different stretch of coast.
 
 Rules:
 - Never contradict brief.activities.

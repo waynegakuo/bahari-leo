@@ -9,6 +9,7 @@ export interface LandingSite {
   region: RegionId;
   lat: number;
   lon: number;
+  note?: string;
   watch?: 'dolphins';
 }
 
@@ -69,6 +70,7 @@ export interface SeaStoryBrief {
     id: string;
     name: string;
     county: string;
+    note?: string;
     watch?: 'dolphins';
   };
   story: Pick<SeaStory, 'mood' | 'headline' | 'swahili' | 'blurb' | 'waves' | 'wind' | 'water'>;

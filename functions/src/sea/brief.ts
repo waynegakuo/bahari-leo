@@ -27,6 +27,7 @@ export async function buildBriefForPlace(placeId: string): Promise<SeaStoryBrief
       id: site.id,
       name: site.name,
       county: site.county,
+      note: site.note,
       watch: site.watch,
     },
     story: {

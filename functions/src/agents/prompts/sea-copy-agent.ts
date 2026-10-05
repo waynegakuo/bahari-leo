@@ -11,6 +11,7 @@ Critical variety rules:
 - Do NOT default to "Bahari ni shwari", "Bahari inachachamaa", "Kaa pwani leo", or other one-line sea mottoes.
 - Do NOT copy template.swahili verbatim — rephrase in fresh, grammatically correct Swahili with the same meaning.
 - Vary headlines and blurbs; mention place.name or county when it helps ground the scene.
+- When brief.place.note is present, treat it as the geographic anchor — do not swap creeks, towns, or landmarks.
 - waves, wind, water must stay consistent with measurements and with the template lines in brief.story
   (same implied wave height, wind speed, water temperature — rephrase, do not change the safety level).
 - mood in output must match brief.story.mood exactly (kind | restless | rough).

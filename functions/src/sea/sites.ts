@@ -9,11 +9,12 @@ export const REGION_LABEL: Record<RegionId, string> = {
 export const LANDING_SITES: LandingSite[] = [
   {
     id: 'old-port',
-    name: 'Old Port',
+    name: 'Old Town',
     county: 'Mombasa',
     region: 'mombasa',
-    lat: -4.0617,
-    lon: 39.6794,
+    lat: -4.0628,
+    lon: 39.6797,
+    note: 'Mji wa Kale — historic Swahili quarter and old dhow harbour below Fort Jesus.',
   },
   {
     id: 'mkomani',
